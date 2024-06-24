@@ -5,8 +5,11 @@ import * as IconsSolid from 'react-native-heroicons/solid';
 import { COLORS, FONTSIZE } from '../../theme/theme';
 
 
+type InputProps = {
+  searchHandler: (searchText: string) => void;
+}
 
-const InputHeader = (props: any) => {
+const InputHeader = ({searchHandler} : InputProps) => {
     const [searchText, setSearchText] = useState<string>('');
     return (
       <View style={styles.inputBox}>
@@ -19,7 +22,7 @@ const InputHeader = (props: any) => {
         />
         <TouchableOpacity
           style={styles.searchIcon}
-          onPress={() => props.searchHandler(searchText)}>
+          onPress={() => searchHandler(searchText)}>
           <IconsSolid.MagnifyingGlassIcon
             color={COLORS.Orange}
             size={FONTSIZE.size_20}
