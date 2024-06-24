@@ -33,11 +33,6 @@ export const styles = StyleSheet.create({
       bottom: 0,
       alignSelf: 'center',
     },
-    clockIcon: {
-      fontSize: FONTSIZE.size_20,
-      color: COLORS.WhiteRGBA50,
-      marginRight: SPACING.space_8,
-    },
     timeContainer: {
       display: 'flex',
       flexDirection: 'row',
