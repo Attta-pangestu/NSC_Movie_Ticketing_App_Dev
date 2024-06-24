@@ -1,5 +1,5 @@
 import React from 'react';
-import HomeScreen from '../screens/HomeScreen';
+import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
 import {COLORS, FONTSIZE, SPACING} from '../theme/theme';
 import {View, StyleSheet} from 'react-native';
