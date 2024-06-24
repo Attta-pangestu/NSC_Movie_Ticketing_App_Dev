@@ -1,4 +1,4 @@
-import { nowPlayingMovies, popularMovies, upcomingMovies } from "./enpoint";
+import { movieCastDetails, movieDetails, nowPlayingMovies, popularMovies, upcomingMovies } from "./enpoint";
 
 export const getNowPlayingMoviesList = async () => {
     try {
@@ -34,6 +34,31 @@ export const getNowPlayingMoviesList = async () => {
     } catch (error) {
       console.error(
         ' Something went wrong in getPopularMoviesList Function',
+        error,
+      );
+    }
+  };
+
+
+  
+export const getMovieDetails = async (movieid: number) => {
+    try {
+      let response = await fetch(movieDetails(movieid));
+      let json = await response.json();
+      return json;
+    } catch (error) {
+      console.error('Something Went wrong in getMoviesDetails Function', error);
+    }
+  };
+  
+export const getMovieCastDetails = async (movieid: number) => {
+    try {
+      let response = await fetch(movieCastDetails(movieid));
+      let json = await response.json();
+      return json;
+    } catch (error) {
+      console.error(
+        'Something Went wrong in getMovieCastDetails Function',
         error,
       );
     }
