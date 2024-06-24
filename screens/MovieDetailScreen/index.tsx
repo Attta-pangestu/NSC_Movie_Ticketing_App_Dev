@@ -6,10 +6,9 @@ import AppHeader from '../../components/AppHeader';
 import * as IconsSolid from 'react-native-heroicons/solid';
 import { COLORS, FONTSIZE, SPACING } from '../../theme/theme';
 import { baseImagePath } from '../../api/enpoint';
-import LinearGradient from 'react-native-linear-gradient';
 import CategoryHeader from '../../components/CategoryHeader/Index';
 import ActorCastCard from '../../components/ActorCast';
-
+import { LinearGradient } from 'expo-linear-gradient';
 
 const MovieDetailScreen = ({navigation, route} : any)  => {
     const [movieData, setMovieData] = useState<any>(undefined);

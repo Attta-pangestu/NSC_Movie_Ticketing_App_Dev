@@ -22,11 +22,13 @@ export const styles = StyleSheet.create({
       width: SPACING.space_20 * 2,
     },
     iconBG: {
+      position: 'relative', 
       height: SPACING.space_20 * 2,
       width: SPACING.space_20 * 2,
       alignItems: 'center',
       justifyContent: 'center',
       borderRadius: BORDERRADIUS.radius_20,
       backgroundColor: COLORS.Orange,
+      
     },
   });
