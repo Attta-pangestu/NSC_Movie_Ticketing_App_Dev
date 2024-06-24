@@ -1,20 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import MovieDetailScreen from './screens/MovieDetailScreen';
+import BookingSeatScreen from './screens/BookingSeatScreen';
+import TabNavigator from './navigator/TabNavigator';
 
-export default function App() {
+const Stack = createNativeStackNavigator();
+
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen
+          name="Tab"
+          component={TabNavigator}
+          options={{animation: 'default'}}
+        />
+        <Stack.Screen
+          name="MovieDetails"
+          component={MovieDetailScreen}
+          options={{animation: 'slide_from_right'}}
+        />
+        <Stack.Screen
+          name="SeatBooking"
+          component={BookingSeatScreen}
+          options={{animation: 'slide_from_bottom'}}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
