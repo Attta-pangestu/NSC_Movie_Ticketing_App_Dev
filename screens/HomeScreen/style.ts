@@ -41,6 +41,10 @@ export const styles = StyleSheet.create({
     fontSize: FONTSIZE.size_14,
     color: COLORS.White,
   },
+  categoryContentContainer: {
+    paddingHorizontal: SPACING.space_12,
+    paddingTop: SPACING.space_24,
+  },
   menuIcon: {
     padding: SPACING.space_10,
     backgroundColor: COLORS.BlackRGB50,

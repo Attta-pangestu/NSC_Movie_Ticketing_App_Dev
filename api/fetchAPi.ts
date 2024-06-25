@@ -5,7 +5,6 @@ import {
   popularMovies,
   upcomingMovies,
   moviesByCategory,
-  genreIds,
 } from './enpoint';
 
 export const getNowPlayingMoviesList = async () => {
