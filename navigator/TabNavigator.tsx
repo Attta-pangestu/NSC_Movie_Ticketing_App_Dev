@@ -5,8 +5,9 @@ import {COLORS, FONTSIZE, SPACING} from '../theme/theme';
 import {View, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import TicketScreen from '../screens/TicketScreen';
-import UserProfileScreen from '../screens/UserProfileScreen';
+
 import * as IconsSolid from 'react-native-heroicons/solid';
+import UserProfileScreen from '../screens/UserProfileScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -34,9 +35,9 @@ const TabNavigator = () => {
                   styles.activeTabBackground,
                   focused ? {backgroundColor: COLORS.Orange} : {},
                 ]}>
-                <IconsSolid.HomeIcon 
-                    color={COLORS.White}
-                    size={FONTSIZE.size_30}
+                <IconsSolid.HomeIcon
+                  color={COLORS.White}
+                  size={FONTSIZE.size_30}
                 />
               </View>
             );
@@ -55,7 +56,7 @@ const TabNavigator = () => {
                   styles.activeTabBackground,
                   focused ? {backgroundColor: COLORS.Orange} : {},
                 ]}>
-                <IconsSolid.MagnifyingGlassIcon 
+                <IconsSolid.MagnifyingGlassIcon
                   color={COLORS.White}
                   size={FONTSIZE.size_30}
                 />
