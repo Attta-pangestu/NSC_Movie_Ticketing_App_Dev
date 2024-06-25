@@ -1,47 +1,25 @@
-import {
-  useFonts,
-  Poppins_100Thin,
-  Poppins_100Thin_Italic,
-  Poppins_200ExtraLight,
-  Poppins_200ExtraLight_Italic,
-  Poppins_300Light,
-  Poppins_300Light_Italic,
-  Poppins_400Regular,
-  Poppins_400Regular_Italic,
-  Poppins_500Medium,
-  Poppins_500Medium_Italic,
-  Poppins_600SemiBold,
-  Poppins_600SemiBold_Italic,
-  Poppins_700Bold,
-  Poppins_700Bold_Italic,
-  Poppins_800ExtraBold,
-  Poppins_800ExtraBold_Italic,
-  Poppins_900Black,
-  Poppins_900Black_Italic,
-} from '@expo-google-fonts/poppins';
-
 interface FontFamily {
-  poppins_black: number;
-  poppins_bold: number;
-  poppins_extrabold: number;
-  poppins_extralight: number;
-  poppins_light: number;
-  poppins_medium: number;
-  poppins_regular: number;
-  poppins_semibold: number;
-  poppins_thin: number;
+  poppins_black: string;
+  poppins_bold: string;
+  poppins_extrabold: string;
+  poppins_extralight: string;
+  poppins_light: string;
+  poppins_medium: string;
+  poppins_regular: string;
+  poppins_semibold: string;
+  poppins_thin: string;
 }
 
 export const FONTFAMILY: FontFamily = {
-  poppins_black: Poppins_400Regular,
-  poppins_bold: Poppins_700Bold,
-  poppins_extrabold: Poppins_800ExtraBold,
-  poppins_extralight: Poppins_200ExtraLight,
-  poppins_light: Poppins_300Light,
-  poppins_medium: Poppins_500Medium,
-  poppins_regular: Poppins_400Regular,
-  poppins_semibold: Poppins_600SemiBold,
-  poppins_thin: Poppins_100Thin,
+  poppins_black: 'Poppins-Black',
+  poppins_bold: 'Poppins-Bold',
+  poppins_extrabold: 'Poppins-ExtraBold',
+  poppins_extralight: 'Poppins-ExtraLight',
+  poppins_light: 'Poppins-Light',
+  poppins_medium: 'Poppins-Medium',
+  poppins_regular: 'Poppins-Regular',
+  poppins_semibold: 'Poppins-SemiBold',
+  poppins_thin: 'Poppins-Thin',
 };
 
 interface Spacing {

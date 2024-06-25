@@ -1,5 +1,11 @@
 import {StyleSheet} from 'react-native';
-import {BORDERRADIUS, COLORS, FONTSIZE, SPACING} from '../../theme/theme';
+import {
+  BORDERRADIUS,
+  COLORS,
+  FONTFAMILY,
+  FONTSIZE,
+  SPACING,
+} from '../../theme/theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -22,6 +28,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: FONTSIZE.size_10,
     color: COLORS.White,
+    fontFamily: FONTFAMILY.poppins_regular,
   },
   seatContainer: {
     marginVertical: SPACING.space_20,
@@ -50,6 +57,7 @@ export const styles = StyleSheet.create({
   radioText: {
     fontSize: FONTSIZE.size_12,
     color: COLORS.Grey,
+    fontFamily: FONTFAMILY.poppins_medium,
   },
   containerGap24: {
     gap: SPACING.space_24,
@@ -65,10 +73,12 @@ export const styles = StyleSheet.create({
   dateText: {
     fontSize: FONTSIZE.size_24,
     color: COLORS.White,
+    fontFamily: FONTFAMILY.poppins_medium,
   },
   dayText: {
     fontSize: FONTSIZE.size_12,
     color: COLORS.White,
+    fontFamily: FONTFAMILY.poppins_regular,
   },
   OutterContainer: {
     marginVertical: SPACING.space_24,
@@ -86,6 +96,7 @@ export const styles = StyleSheet.create({
   timeText: {
     fontSize: FONTSIZE.size_14,
     color: COLORS.White,
+    fontFamily: FONTFAMILY.poppins_regular,
   },
   buttonPriceContainer: {
     flexDirection: 'row',
@@ -100,10 +111,12 @@ export const styles = StyleSheet.create({
   totalPriceText: {
     fontSize: FONTSIZE.size_14,
     color: COLORS.Grey,
+    fontFamily: FONTFAMILY.poppins_regular,
   },
   price: {
     fontSize: FONTSIZE.size_24,
     color: COLORS.White,
+    fontFamily: FONTFAMILY.poppins_medium,
   },
   buttonText: {
     borderRadius: BORDERRADIUS.radius_25,
