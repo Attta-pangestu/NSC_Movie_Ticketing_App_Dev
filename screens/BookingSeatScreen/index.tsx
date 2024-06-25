@@ -4,6 +4,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -15,6 +16,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 import {COLORS, FONTSIZE, SPACING} from '../../theme/theme';
 import AppHeader from '../../components/AppHeader';
 import * as IconsSolid from 'react-native-heroicons/solid';
+import * as EncryptedStorage from 'expo-secure-store';
 
 const BookingSeatScreen = ({navigation, route}: any) => {
   const [dateArray, setDateArray] = useState<any[]>(generateDate());
@@ -44,8 +46,41 @@ const BookingSeatScreen = ({navigation, route}: any) => {
     }
   };
 
-  function bookSeatHandler() {
-    console.log('Handle book');
+  async function bookSeatHandler() {
+    if (
+      selectedSeatArray.length !== 0 &&
+      timeArray[selectedTimeIndex] !== undefined &&
+      dateArray[selectedDateIndex] !== undefined
+    ) {
+      try {
+        await EncryptedStorage.setItemAsync(
+          'ticket',
+          JSON.stringify({
+            seatArray: selectedSeatArray,
+            time: timeArray[selectedTimeIndex],
+            date: dateArray[selectedDateIndex],
+            ticketImage: route.params.PosterImage,
+          }),
+        );
+      } catch (error) {
+        console.error(
+          'Something went Wrong while storing in BookSeats Functions',
+          error,
+        );
+      }
+      navigation.navigate('Ticket', {
+        seatArray: selectedSeatArray,
+        time: timeArray[selectedTimeIndex],
+        date: dateArray[selectedDateIndex],
+        ticketImage: route.params.PosterImage,
+      });
+    } else {
+      ToastAndroid.showWithGravity(
+        'Please Select Seats, Date and Time of the Show',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+      );
+    }
   }
 
   return (
@@ -187,7 +222,9 @@ const BookingSeatScreen = ({navigation, route}: any) => {
       <View style={styles.buttonPriceContainer}>
         <View style={styles.priceContainer}>
           <Text style={styles.totalPriceText}>Total Pembayaran</Text>
-          <Text style={styles.price}>Rp {price}.000 </Text>
+          <Text style={styles.price}>
+            {price > 0 ? `Rp ${price}.000` : '-'}{' '}
+          </Text>
         </View>
         <TouchableOpacity onPress={bookSeatHandler}>
           <Text style={styles.buttonText}>Checkout Ticket</Text>

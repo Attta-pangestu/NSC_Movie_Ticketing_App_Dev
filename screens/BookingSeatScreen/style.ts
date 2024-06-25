@@ -49,7 +49,7 @@ export const styles = StyleSheet.create({
 
   radioText: {
     fontSize: FONTSIZE.size_12,
-    color: COLORS.White,
+    color: COLORS.Grey,
   },
   containerGap24: {
     gap: SPACING.space_24,
