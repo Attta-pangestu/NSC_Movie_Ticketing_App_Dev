@@ -5,6 +5,7 @@ import {
   popularMovies,
   upcomingMovies,
   moviesByCategory,
+  movieTrailer,
 } from './enpoint';
 
 export const getNowPlayingMoviesList = async () => {
@@ -80,4 +81,15 @@ export const getMoviesByCategory = async (genreId: number) => {
       error,
     );
   }
+};
+
+export const getMovieTrailer = async (id: number) => {
+  const response = await fetch(movieTrailer(id));
+  const data = await response.json();
+  const trailers = data.results.filter(
+    (video: any) => video.type === 'Trailer' && video.site === 'YouTube',
+  );
+  return trailers.length > 0
+    ? `https://www.youtube.com/watch?v=${trailers[0].key}`
+    : null;
 };

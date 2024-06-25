@@ -25,3 +25,7 @@ export const genreIds = {
   Drama: 18,
   Horror: 27,
 };
+
+export const movieTrailer = (id: number) => {
+  return `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${apikey}`;
+};

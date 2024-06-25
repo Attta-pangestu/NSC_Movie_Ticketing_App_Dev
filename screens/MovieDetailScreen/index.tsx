@@ -1,3 +1,4 @@
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -5,13 +6,16 @@ import {
   ImageBackground,
   ScrollView,
   StatusBar,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  Modal,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {getMovieCastDetails, getMovieDetails} from '../../api/fetchAPi';
+import {
+  getMovieCastDetails,
+  getMovieDetails,
+  getMovieTrailer,
+} from '../../api/fetchAPi';
 import {styles} from './style';
 import AppHeader from '../../components/AppHeader';
 import * as IconsSolid from 'react-native-heroicons/solid';
@@ -20,10 +24,13 @@ import {baseImagePath} from '../../api/enpoint';
 import CategoryHeader from '../../components/CategoryHeader/Index';
 import ActorCastCard from '../../components/ActorCast';
 import {LinearGradient} from 'expo-linear-gradient';
+import YoutubeIframe from 'react-native-youtube-iframe';
 
 const MovieDetailScreen = ({navigation, route}: any) => {
   const [movieData, setMovieData] = useState<any>(undefined);
   const [movieCastData, setmovieCastData] = useState<any>(undefined);
+  const [trailerUrl, setTrailerUrl] = useState<string | null>(null);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
     (async () => {
@@ -35,7 +42,12 @@ const MovieDetailScreen = ({navigation, route}: any) => {
       const tempMovieCastData = await getMovieCastDetails(route.params.movieid);
       setmovieCastData(tempMovieCastData.cast);
     })();
-  }, []);
+
+    (async () => {
+      const trailerUrl = await getMovieTrailer(route.params.movieid);
+      setTrailerUrl(trailerUrl);
+    })();
+  }, [route.params.movieid]);
 
   if (
     movieData == undefined &&
@@ -164,16 +176,37 @@ const MovieDetailScreen = ({navigation, route}: any) => {
           <TouchableOpacity
             style={styles.buttonBG}
             onPress={() => {
-              navigation.push('SeatBooking', {
-                BgImage: baseImagePath('w780', movieData.backdrop_path),
-                PosterImage: baseImagePath('original', movieData.poster_path),
-              });
+              setModalVisible(true);
             }}>
             <Text style={styles.buttonText}>Tonton di Streaming</Text>
           </TouchableOpacity>
         </View>
       </View>
+
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          {trailerUrl ? (
+            <YoutubeIframe
+              height={300}
+              play={true}
+              videoId={trailerUrl.split('v=')[1]} // Extract the YouTube video ID
+              onReady={() => console.log('ready')}
+              onChangeState={(e) => console.log('state changed', e)}
+              onError={(e) => console.log('error', e)}
+            />
+          ) : (
+            <Text>Trailer not available</Text>
+          )}
+          <TouchableOpacity onPress={() => setModalVisible(false)}>
+            <Text style={{color: 'red', marginTop: 20}}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
+
 export default MovieDetailScreen;
