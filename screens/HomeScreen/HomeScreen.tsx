@@ -1,69 +1,92 @@
-import { ActivityIndicator, Dimensions, FlatList, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { useNavigation } from '@react-navigation/native';
-import { getNowPlayingMoviesList, getPopularMoviesList, getUpcomingMoviesList } from '../../api/fetchAPi';
-import {styles} from './style'
+import React, {useEffect, useState, useRef} from 'react';
+import {
+  ActivityIndicator,
+  Dimensions,
+  FlatList,
+  ScrollView,
+  StatusBar,
+  View,
+  Image,
+  ViewToken,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {
+  getNowPlayingMoviesList,
+  getPopularMoviesList,
+  getUpcomingMoviesList,
+} from '../../api/fetchAPi';
+import {styles} from './style';
 import InputHeader from '../../components/InputHeader';
 import CategoryHeader from '../../components/CategoryHeader/Index';
 import MovieCard from '../../components/MovieCard';
-import { SPACING } from '../../theme/theme';
-import { baseImagePath } from '../../api/enpoint';
+import {SPACING} from '../../theme/theme';
+import {baseImagePath} from '../../api/enpoint';
 import SubMovieCard from '../../components/SubMovieCard';
 
 const {width, height} = Dimensions.get('window');
 
+interface Movie {
+  id: number;
+  original_title: string;
+  poster_path: string;
+  genre_ids: number[];
+  vote_average: number;
+  vote_count: number;
+}
 
-const HomeScreen = ({navigation} : any) => {
-    const [nowPlayingMoviesList, setNowPlayingMoviesList] =
-    useState<any>(undefined);
-  const [popularMoviesList, setPopularMoviesList] = useState<any>(undefined);
-  const [upcomingMoviesList, setUpcomingMoviesList] = useState<any>(undefined);
+interface HomeScreenProps {
+  navigation: any;
+}
+
+const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
+  const [nowPlayingMoviesList, setNowPlayingMoviesList] = useState<Movie[]>([]);
+  const [popularMoviesList, setPopularMoviesList] = useState<Movie[]>([]);
+  const [upcomingMoviesList, setUpcomingMoviesList] = useState<Movie[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     (async () => {
-      let tempNowPlaying = await getNowPlayingMoviesList();
-      setNowPlayingMoviesList([
-        ...tempNowPlaying.results,
-      ]);
+      const tempNowPlaying = await getNowPlayingMoviesList();
+      setNowPlayingMoviesList(tempNowPlaying.results);
 
-      let tempPopular = await getPopularMoviesList();
+      const tempPopular = await getPopularMoviesList();
       setPopularMoviesList(tempPopular.results);
 
-      let tempUpcoming = await getUpcomingMoviesList();
+      const tempUpcoming = await getUpcomingMoviesList();
       setUpcomingMoviesList(tempUpcoming.results);
-    
     })();
   }, []);
+
+  const onViewRef = useRef((viewableItems: {changed: ViewToken[]}) => {
+    if (viewableItems.changed.length > 0) {
+      setCurrentIndex(viewableItems.changed[0].index ?? 0);
+    }
+  });
+  const viewConfigRef = useRef({viewAreaCoveragePercentThreshold: 50});
 
   const searchHandler = () => {
     navigation.navigate('Search');
   };
 
-
   if (
-    nowPlayingMoviesList == undefined &&
-    nowPlayingMoviesList == null &&
-    popularMoviesList == undefined &&
-    popularMoviesList == null &&
-    upcomingMoviesList == undefined &&
-    upcomingMoviesList == null
+    nowPlayingMoviesList.length === 0 &&
+    popularMoviesList.length === 0 &&
+    upcomingMoviesList.length === 0
   ) {
     return (
       <ScrollView
-          style={styles.container}
-          bounces={false}
-          contentContainerStyle={styles.scrollViewContainer}>
-          <StatusBar hidden />
-          <View style={styles.InputHeaderContainer}>
-            <InputHeader searchHandler={searchHandler} />
-          </View>
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size={'large'} color={'orange'} />
-          </View>
-          
+        style={styles.container}
+        bounces={false}
+        contentContainerStyle={styles.scrollViewContainer}>
+        <StatusBar hidden />
+        <View style={styles.InputHeaderContainer}>
+          <InputHeader searchHandler={searchHandler} />
+        </View>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size={'large'} color={'orange'} />
+        </View>
       </ScrollView>
-    )
-
+    );
   }
 
   return (
@@ -72,11 +95,36 @@ const HomeScreen = ({navigation} : any) => {
       <View style={styles.InputHeaderContainer}>
         <InputHeader searchHandler={searchHandler} />
       </View>
+      <FlatList
+        data={popularMoviesList.slice(0, 5)}
+        keyExtractor={(item) => item.id.toString()}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        onViewableItemsChanged={onViewRef.current}
+        viewabilityConfig={viewConfigRef.current}
+        renderItem={({item}) => (
+          <Image
+            source={{uri: baseImagePath('w780', item.poster_path)}}
+            style={styles.bannerImage}
+          />
+        )}
+      />
+      <View style={styles.pagination}>
+        {popularMoviesList.slice(0, 5).map((_, index) => (
+          <View
+            key={index}
+            style={[
+              styles.paginationDot,
+              currentIndex === index && styles.paginationDotActive,
+            ]}
+          />
+        ))}
+      </View>
       <CategoryHeader title={'Now Playing'} />
-
       <FlatList
         data={nowPlayingMoviesList}
-        keyExtractor={(item: any) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         bounces={false}
         snapToInterval={width * 0.7 + SPACING.space_36}
         horizontal
@@ -89,7 +137,8 @@ const HomeScreen = ({navigation} : any) => {
               <View
                 style={{
                   width: (width - (width * 0.7 + SPACING.space_36 * 2)) / 2,
-                }}></View>
+                }}
+              />
             );
           }
           return (
@@ -99,8 +148,8 @@ const HomeScreen = ({navigation} : any) => {
                 navigation.push('MovieDetails', {movieid: item.id});
               }}
               cardWidth={width * 0.7}
-              isFirst={index == 0 ? true : false}
-              isLast={index == upcomingMoviesList?.length - 1 ? true : false}
+              isFirst={index === 0}
+              isLast={index === nowPlayingMoviesList.length - 1}
               title={item.original_title}
               imagePath={baseImagePath('w780', item.poster_path)}
               genre={item.genre_ids.slice(1, 4)}
@@ -113,7 +162,7 @@ const HomeScreen = ({navigation} : any) => {
       <CategoryHeader title={'Popular'} />
       <FlatList
         data={popularMoviesList}
-        keyExtractor={(item: any) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}
         bounces={false}
@@ -125,17 +174,17 @@ const HomeScreen = ({navigation} : any) => {
               navigation.push('MovieDetails', {movieid: item.id});
             }}
             cardWidth={width / 3}
-            isFirst={index == 0 ? true : false}
-            isLast={index == upcomingMoviesList?.length - 1 ? true : false}
+            isFirst={index === 0}
+            isLast={index === popularMoviesList.length - 1}
             title={item.original_title}
             imagePath={baseImagePath('w342', item.poster_path)}
           />
         )}
       />
-       <CategoryHeader title={'Upcoming'} />
+      <CategoryHeader title={'Upcoming'} />
       <FlatList
         data={upcomingMoviesList}
-        keyExtractor={(item: any) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         horizontal
         bounces={false}
         showsHorizontalScrollIndicator={false}
@@ -147,16 +196,15 @@ const HomeScreen = ({navigation} : any) => {
               navigation.push('MovieDetails', {movieid: item.id});
             }}
             cardWidth={width / 3}
-            isFirst={index == 0 ? true : false}
-            isLast={index == upcomingMoviesList?.length - 1 ? true : false}
+            isFirst={index === 0}
+            isLast={index === upcomingMoviesList.length - 1}
             title={item.original_title}
             imagePath={baseImagePath('w342', item.poster_path)}
           />
         )}
       />
     </ScrollView>
-  )
+  );
+};
 
-}
-
-export default HomeScreen
+export default HomeScreen;

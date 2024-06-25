@@ -13,15 +13,19 @@ export const styles = StyleSheet.create({
     paddingVertical: SPACING.space_8,
     paddingHorizontal: SPACING.space_24,
     borderWidth: 2,
-    borderColor: COLORS.WhiteRGBA15,
+    borderColor: COLORS.WhiteRGBA75,
     borderRadius: BORDERRADIUS.radius_25,
     flexDirection: 'row',
+    backgroundColor: COLORS.BlackRGB50,
   },
   textInput: {
     width: '90%',
-    fontFamily: FONTFAMILY.poppins_regular,
+    fontFamily: FONTFAMILY.poppins_extrabold,
     fontSize: FONTSIZE.size_14,
     color: COLORS.White,
+  },
+  textInputPlaceholder: {
+    color: COLORS.WhiteRGBA75,
   },
   searchIcon: {
     alignItems: 'center',
