@@ -8,6 +8,8 @@ import {
   View,
   Image,
   ViewToken,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -19,9 +21,11 @@ import {styles} from './style';
 import InputHeader from '../../components/InputHeader';
 import CategoryHeader from '../../components/CategoryHeader/Index';
 import MovieCard from '../../components/MovieCard';
-import {SPACING} from '../../theme/theme';
+import {COLORS, FONTSIZE, SPACING} from '../../theme/theme';
 import {baseImagePath} from '../../api/enpoint';
 import SubMovieCard from '../../components/SubMovieCard';
+import * as IconsSolid from 'react-native-heroicons/solid';
+import {LinearGradient} from 'expo-linear-gradient';
 
 const {width, height} = Dimensions.get('window');
 
@@ -79,9 +83,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
         bounces={false}
         contentContainerStyle={styles.scrollViewContainer}>
         <StatusBar hidden />
-        <View style={styles.InputHeaderContainer}>
-          <InputHeader searchHandler={searchHandler} />
-        </View>
+        <InputHeader searchHandler={searchHandler} />
         <View style={styles.loadingContainer}>
           <ActivityIndicator size={'large'} color={'orange'} />
         </View>
@@ -92,9 +94,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   return (
     <ScrollView style={styles.container} bounces={false}>
       <StatusBar hidden />
-      <View style={styles.InputHeaderContainer}>
-        <InputHeader searchHandler={searchHandler} />
-      </View>
+      <InputHeader searchHandler={searchHandler} />
       <FlatList
         data={popularMoviesList.slice(0, 5)}
         keyExtractor={(item) => item.id.toString()}
@@ -104,10 +104,16 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
         onViewableItemsChanged={onViewRef.current}
         viewabilityConfig={viewConfigRef.current}
         renderItem={({item}) => (
-          <Image
-            source={{uri: baseImagePath('w780', item.poster_path)}}
-            style={styles.bannerImage}
-          />
+          <View>
+            <Image
+              source={{uri: baseImagePath('w780', item.poster_path)}}
+              style={styles.bannerImage}
+            />
+            <LinearGradient
+              colors={['transparent', 'rgba(0, 0, 0, 0.8)']}
+              style={styles.gradient}
+            />
+          </View>
         )}
       />
       <View style={styles.pagination}>

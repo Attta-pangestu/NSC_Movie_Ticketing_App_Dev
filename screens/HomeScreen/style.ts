@@ -1,5 +1,13 @@
 import {Dimensions, StyleSheet} from 'react-native';
-import {COLORS, SPACING} from '../../theme/theme';
+import {
+  BORDERRADIUS,
+  COLORS,
+  FONTFAMILY,
+  FONTSIZE,
+  SPACING,
+} from '../../theme/theme';
+
+const {width, height} = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
   container: {
@@ -15,20 +23,19 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
   },
-  InputHeaderContainer: {
-    marginHorizontal: SPACING.space_36,
-    marginTop: SPACING.space_28,
-    position: 'absolute',
-    top: 11,
-    zIndex: 50,
+  menuIcon: {
+    padding: SPACING.space_10,
+    backgroundColor: COLORS.BlackRGB50,
+    borderRadius: BORDERRADIUS.radius_25,
   },
+
   containerGap36: {
     gap: SPACING.space_36,
   },
   bannerImage: {
     width: Dimensions.get('window').width,
-    height: 400,
-    objectFit: 'fill',
+    height: 600,
+    objectFit: 'cover',
   },
   pagination: {
     flexDirection: 'row',
@@ -48,5 +55,16 @@ export const styles = StyleSheet.create({
   },
   gapContainer: {
     gap: SPACING.space_36,
+  },
+  ImageBG: {
+    width: '100%',
+    height: 600,
+  },
+  gradient: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: height * 0.6,
   },
 });

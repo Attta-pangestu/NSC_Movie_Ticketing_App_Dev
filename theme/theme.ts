@@ -98,6 +98,8 @@ interface FontSize {
   size_20: number;
   size_24: number;
   size_30: number;
+  size_36: number;
+  size_42: number;
 }
 
 export const FONTSIZE: FontSize = {
@@ -110,6 +112,8 @@ export const FONTSIZE: FontSize = {
   size_20: 20,
   size_24: 24,
   size_30: 30,
+  size_36: 36,
+  size_42: 42,
 };
 
 interface BorderRadius {

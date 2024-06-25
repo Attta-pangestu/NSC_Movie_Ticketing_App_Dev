@@ -7,11 +7,11 @@ import {
   StatusBar,
   FlatList,
 } from 'react-native';
-import { styles } from './style';
-import { baseImagePath, searchMovies } from '../../api/enpoint';
+import {styles} from './style';
+import {baseImagePath, searchMovies} from '../../api/enpoint';
 import InputHeader from '../../components/InputHeader';
 import SubMovieCard from '../../components/SubMovieCard';
-import { SPACING } from '../../theme/theme';
+import {SPACING} from '../../theme/theme';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -29,21 +29,17 @@ const SearchScreen = ({navigation}: any) => {
   };
 
   return (
-    <View style={[styles.container, {width: width}]} >
+    <View style={[styles.container, {width: width}]}>
       <StatusBar hidden />
 
-      <View>
+      <View style={{width: '100%', height: '100%'}}>
+        <InputHeader searchHandler={searchHandler} />
         <FlatList
           data={searchList}
           keyExtractor={(item: any) => item.id}
           bounces={false}
           numColumns={2}
           showsVerticalScrollIndicator={false}
-          ListHeaderComponent={
-            <View style={styles.InputHeaderContainer}>
-              <InputHeader searchHandler={searchHandler} />
-            </View>
-          }
           contentContainerStyle={styles.centerContainer}
           renderItem={({item, index}) => (
             <SubMovieCard
@@ -62,6 +58,5 @@ const SearchScreen = ({navigation}: any) => {
     </View>
   );
 };
-
 
 export default SearchScreen;
