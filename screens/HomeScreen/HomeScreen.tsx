@@ -12,6 +12,7 @@ import {
   Text,
 } from 'react-native';
 import {
+  getMoviesByCategory,
   getNowPlayingMoviesList,
   getPopularMoviesList,
   getUpcomingMoviesList,
@@ -20,9 +21,9 @@ import {styles} from './style';
 import InputHeader from '../../components/InputHeader';
 import CategoryHeader from '../../components/CategoryHeader/Index';
 import MovieCard from '../../components/MovieCard';
+import SubMovieCard from '../../components/SubMovieCard';
 import {SPACING} from '../../theme/theme';
 import {baseImagePath} from '../../api/enpoint';
-import SubMovieCard from '../../components/SubMovieCard';
 import {LinearGradient} from 'expo-linear-gradient';
 
 const {width} = Dimensions.get('window');
@@ -44,7 +45,12 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   const [nowPlayingMoviesList, setNowPlayingMoviesList] = useState<Movie[]>([]);
   const [popularMoviesList, setPopularMoviesList] = useState<Movie[]>([]);
   const [upcomingMoviesList, setUpcomingMoviesList] = useState<Movie[]>([]);
+  const [actionMoviesList, setActionMoviesList] = useState<Movie[]>([]);
+  const [comedyMoviesList, setComedyMoviesList] = useState<Movie[]>([]);
+  const [dramaMoviesList, setDramaMoviesList] = useState<Movie[]>([]);
+  const [horrorMoviesList, setHorrorMoviesList] = useState<Movie[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   useEffect(() => {
@@ -57,6 +63,18 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
 
       const tempUpcoming = await getUpcomingMoviesList();
       setUpcomingMoviesList(tempUpcoming.results);
+
+      const tempAction = await getMoviesByCategory(28); // Action genre ID
+      setActionMoviesList(tempAction.results);
+
+      const tempComedy = await getMoviesByCategory(35); // Comedy genre ID
+      setComedyMoviesList(tempComedy.results);
+
+      const tempDrama = await getMoviesByCategory(18); // Drama genre ID
+      setDramaMoviesList(tempDrama.results);
+
+      const tempHorror = await getMoviesByCategory(27); // Horror genre ID
+      setHorrorMoviesList(tempHorror.results);
     })();
   }, []);
 
@@ -156,33 +174,22 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
           showsHorizontalScrollIndicator={false}
           decelerationRate={0}
           contentContainerStyle={styles.containerGap36}
-          renderItem={({item, index}) => {
-            if (!item.original_title) {
-              return (
-                <View
-                  style={{
-                    width: (width - (width * 0.7 + SPACING.space_36 * 2)) / 2,
-                  }}
-                />
-              );
-            }
-            return (
-              <MovieCard
-                shouldMarginatedAround={true}
-                cardFunction={() => {
-                  navigation.push('MovieDetails', {movieid: item.id});
-                }}
-                cardWidth={width * 0.7}
-                isFirst={index === 0}
-                isLast={index === nowPlayingMoviesList.length - 1}
-                title={item.original_title}
-                imagePath={baseImagePath('w780', item.poster_path)}
-                genre={item.genre_ids.slice(1, 4)}
-                vote_average={item.vote_average}
-                vote_count={item.vote_count}
-              />
-            );
-          }}
+          renderItem={({item, index}) => (
+            <MovieCard
+              shouldMarginatedAround={true}
+              cardFunction={() => {
+                navigation.push('MovieDetails', {movieid: item.id});
+              }}
+              cardWidth={width * 0.7}
+              isFirst={index === 0}
+              isLast={index === nowPlayingMoviesList.length - 1}
+              title={item.original_title}
+              imagePath={baseImagePath('w780', item.poster_path)}
+              genre={item.genre_ids.slice(1, 4)}
+              vote_average={item.vote_average}
+              vote_count={item.vote_count}
+            />
+          )}
         />
         <CategoryHeader title={'Popular'} />
         <FlatList
@@ -223,6 +230,94 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
               cardWidth={width / 3}
               isFirst={index === 0}
               isLast={index === upcomingMoviesList.length - 1}
+              title={item.original_title}
+              imagePath={baseImagePath('w342', item.poster_path)}
+            />
+          )}
+        />
+        <CategoryHeader title={'Action Movies'} />
+        <FlatList
+          data={actionMoviesList}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          bounces={false}
+          contentContainerStyle={styles.containerGap36}
+          renderItem={({item, index}) => (
+            <SubMovieCard
+              shouldMarginatedAtEnd={true}
+              cardFunction={() => {
+                navigation.push('MovieDetails', {movieid: item.id});
+              }}
+              cardWidth={width / 3}
+              isFirst={index === 0}
+              isLast={index === actionMoviesList.length - 1}
+              title={item.original_title}
+              imagePath={baseImagePath('w342', item.poster_path)}
+            />
+          )}
+        />
+        <CategoryHeader title={'Comedy Movies'} />
+        <FlatList
+          data={comedyMoviesList}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          bounces={false}
+          contentContainerStyle={styles.containerGap36}
+          renderItem={({item, index}) => (
+            <SubMovieCard
+              shouldMarginatedAtEnd={true}
+              cardFunction={() => {
+                navigation.push('MovieDetails', {movieid: item.id});
+              }}
+              cardWidth={width / 3}
+              isFirst={index === 0}
+              isLast={index === actionMoviesList.length - 1}
+              title={item.original_title}
+              imagePath={baseImagePath('w342', item.poster_path)}
+            />
+          )}
+        />
+        <CategoryHeader title={'Drama Movies'} />
+        <FlatList
+          data={dramaMoviesList}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          bounces={false}
+          contentContainerStyle={styles.containerGap36}
+          renderItem={({item, index}) => (
+            <SubMovieCard
+              shouldMarginatedAtEnd={true}
+              cardFunction={() => {
+                navigation.push('MovieDetails', {movieid: item.id});
+              }}
+              cardWidth={width / 3}
+              isFirst={index === 0}
+              isLast={index === dramaMoviesList.length - 1}
+              title={item.original_title}
+              imagePath={baseImagePath('w342', item.poster_path)}
+            />
+          )}
+        />
+        <CategoryHeader title={'Horror Movies'} />
+        <FlatList
+          data={horrorMoviesList}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          bounces={false}
+          contentContainerStyle={styles.containerGap36}
+          renderItem={({item, index}) => (
+            <SubMovieCard
+              shouldMarginatedAtEnd={true}
+              cardFunction={() => {
+                navigation.push('MovieDetails', {movieid: item.id});
+              }}
+              cardWidth={width / 3}
+              isFirst={index === 0}
+              isLast={index === horrorMoviesList.length - 1}
               title={item.original_title}
               imagePath={baseImagePath('w342', item.poster_path)}
             />

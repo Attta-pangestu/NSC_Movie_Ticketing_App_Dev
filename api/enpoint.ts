@@ -14,3 +14,14 @@ export const movieDetails = (id: number) => {
 export const movieCastDetails = (id: number) => {
   return `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apikey}`;
 };
+
+export const moviesByCategory = (genreId: number) => {
+  return `https://api.themoviedb.org/3/discover/movie?api_key=${apikey}&with_genres=${genreId}`;
+};
+
+export const genreIds = {
+  Action: 28,
+  Comedy: 35,
+  Drama: 18,
+  Horror: 27,
+};
