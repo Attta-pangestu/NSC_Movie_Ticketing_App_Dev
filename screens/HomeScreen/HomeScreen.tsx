@@ -8,10 +8,7 @@ import {
   View,
   Image,
   ViewToken,
-  TouchableOpacity,
-  Text,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import {
   getNowPlayingMoviesList,
   getPopularMoviesList,
@@ -21,13 +18,12 @@ import {styles} from './style';
 import InputHeader from '../../components/InputHeader';
 import CategoryHeader from '../../components/CategoryHeader/Index';
 import MovieCard from '../../components/MovieCard';
-import {COLORS, FONTSIZE, SPACING} from '../../theme/theme';
+import {SPACING} from '../../theme/theme';
 import {baseImagePath} from '../../api/enpoint';
 import SubMovieCard from '../../components/SubMovieCard';
-import * as IconsSolid from 'react-native-heroicons/solid';
 import {LinearGradient} from 'expo-linear-gradient';
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 interface Movie {
   id: number;

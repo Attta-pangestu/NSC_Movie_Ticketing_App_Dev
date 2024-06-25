@@ -8,6 +8,8 @@ import TicketScreen from '../screens/TicketScreen';
 
 import * as IconsSolid from 'react-native-heroicons/solid';
 import UserProfileScreen from '../screens/UserProfileScreen';
+import FavoritesScreen from '../screens/FavoritesScreen';
+import BookmarkScreen from '../screens/BookmarkScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,7 +22,6 @@ const TabNavigator = () => {
         tabBarStyle: {
           backgroundColor: COLORS.Black,
           borderTopWidth: 0,
-          height: SPACING.space_10 * 8,
         },
       }}>
       <Tab.Screen
@@ -57,6 +58,48 @@ const TabNavigator = () => {
                   focused ? {backgroundColor: COLORS.Orange} : {},
                 ]}>
                 <IconsSolid.MagnifyingGlassIcon
+                  color={COLORS.White}
+                  size={FONTSIZE.size_30}
+                />
+              </View>
+            );
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Favorite"
+        component={FavoritesScreen}
+        options={{
+          tabBarShowLabel: false,
+          tabBarIcon: ({focused, color, size}) => {
+            return (
+              <View
+                style={[
+                  styles.activeTabBackground,
+                  focused ? {backgroundColor: COLORS.Orange} : {},
+                ]}>
+                <IconsSolid.HeartIcon
+                  color={COLORS.White}
+                  size={FONTSIZE.size_30}
+                />
+              </View>
+            );
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Bookmark"
+        component={BookmarkScreen}
+        options={{
+          tabBarShowLabel: false,
+          tabBarIcon: ({focused, color, size}) => {
+            return (
+              <View
+                style={[
+                  styles.activeTabBackground,
+                  focused ? {backgroundColor: COLORS.Orange} : {},
+                ]}>
+                <IconsSolid.BookmarkIcon
                   color={COLORS.White}
                   size={FONTSIZE.size_30}
                 />
@@ -114,7 +157,7 @@ const TabNavigator = () => {
 const styles = StyleSheet.create({
   activeTabBackground: {
     backgroundColor: COLORS.Black,
-    padding: SPACING.space_18,
+    padding: SPACING.space_10,
     borderRadius: SPACING.space_18 * 10,
   },
 });
