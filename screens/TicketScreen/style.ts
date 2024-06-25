@@ -53,7 +53,7 @@ export const styles = StyleSheet.create({
   },
   ticketSeatContainer: {
     flexDirection: 'row',
-    gap: SPACING.space_36,
+    gap: SPACING.space_18,
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: SPACING.space_10,
@@ -82,7 +82,7 @@ export const styles = StyleSheet.create({
     height: 50,
     aspectRatio: 158 / 52,
   },
-  blackCircle: {
+  dotCircle: {
     height: 80,
     width: 80,
     borderRadius: 80,
