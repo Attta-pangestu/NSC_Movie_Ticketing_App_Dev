@@ -24,7 +24,6 @@ import {baseImagePath} from '../../api/enpoint';
 import CategoryHeader from '../../components/CategoryHeader/Index';
 import ActorCastCard from '../../components/ActorCast';
 import {LinearGradient} from 'expo-linear-gradient';
-import YoutubeIframe from 'react-native-youtube-iframe';
 
 const MovieDetailScreen = ({navigation, route}: any) => {
   const [movieData, setMovieData] = useState<any>(undefined);
@@ -189,14 +188,7 @@ const MovieDetailScreen = ({navigation, route}: any) => {
         onRequestClose={() => setModalVisible(false)}>
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           {trailerUrl ? (
-            <YoutubeIframe
-              height={300}
-              play={true}
-              videoId={trailerUrl.split('v=')[1]} // Extract the YouTube video ID
-              onReady={() => console.log('ready')}
-              onChangeState={(e) => console.log('state changed', e)}
-              onError={(e) => console.log('error', e)}
-            />
+            <Text>Playing</Text>
           ) : (
             <Text>Trailer not available</Text>
           )}
