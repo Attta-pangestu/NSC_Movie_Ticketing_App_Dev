@@ -8,6 +8,8 @@ import {
   View,
   Image,
   ViewToken,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
 import {
   getNowPlayingMoviesList,
@@ -43,6 +45,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   const [popularMoviesList, setPopularMoviesList] = useState<Movie[]>([]);
   const [upcomingMoviesList, setUpcomingMoviesList] = useState<Movie[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
   useEffect(() => {
     (async () => {
@@ -123,88 +126,109 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
           />
         ))}
       </View>
-      <CategoryHeader title={'Now Playing'} />
-      <FlatList
-        data={nowPlayingMoviesList}
-        keyExtractor={(item) => item.id.toString()}
-        bounces={false}
-        snapToInterval={width * 0.7 + SPACING.space_36}
+      <CategoryHeader title={'Categories'} />
+      <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        decelerationRate={0}
-        contentContainerStyle={styles.containerGap36}
-        renderItem={({item, index}) => {
-          if (!item.original_title) {
+        style={styles.categoryContainer}>
+        {['All', 'Action', 'Comedy', 'Drama', 'Horror'].map((category) => (
+          <TouchableOpacity
+            key={category}
+            style={[
+              styles.categoryBtn,
+              selectedCategory === category && styles.selectedCategoryBtn,
+            ]}
+            activeOpacity={0.7}
+            onPress={() => setSelectedCategory(category)}>
+            <Text style={styles.categoryText}>{category}</Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+
+      <View>
+        <CategoryHeader title={'Now Playing'} />
+        <FlatList
+          data={nowPlayingMoviesList}
+          keyExtractor={(item) => item.id.toString()}
+          bounces={false}
+          snapToInterval={width * 0.7 + SPACING.space_36}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          decelerationRate={0}
+          contentContainerStyle={styles.containerGap36}
+          renderItem={({item, index}) => {
+            if (!item.original_title) {
+              return (
+                <View
+                  style={{
+                    width: (width - (width * 0.7 + SPACING.space_36 * 2)) / 2,
+                  }}
+                />
+              );
+            }
             return (
-              <View
-                style={{
-                  width: (width - (width * 0.7 + SPACING.space_36 * 2)) / 2,
+              <MovieCard
+                shouldMarginatedAround={true}
+                cardFunction={() => {
+                  navigation.push('MovieDetails', {movieid: item.id});
                 }}
+                cardWidth={width * 0.7}
+                isFirst={index === 0}
+                isLast={index === nowPlayingMoviesList.length - 1}
+                title={item.original_title}
+                imagePath={baseImagePath('w780', item.poster_path)}
+                genre={item.genre_ids.slice(1, 4)}
+                vote_average={item.vote_average}
+                vote_count={item.vote_count}
               />
             );
-          }
-          return (
-            <MovieCard
-              shouldMarginatedAround={true}
+          }}
+        />
+        <CategoryHeader title={'Popular'} />
+        <FlatList
+          data={popularMoviesList}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          bounces={false}
+          contentContainerStyle={styles.containerGap36}
+          renderItem={({item, index}) => (
+            <SubMovieCard
+              shouldMarginatedAtEnd={true}
               cardFunction={() => {
                 navigation.push('MovieDetails', {movieid: item.id});
               }}
-              cardWidth={width * 0.7}
+              cardWidth={width / 3}
               isFirst={index === 0}
-              isLast={index === nowPlayingMoviesList.length - 1}
+              isLast={index === popularMoviesList.length - 1}
               title={item.original_title}
-              imagePath={baseImagePath('w780', item.poster_path)}
-              genre={item.genre_ids.slice(1, 4)}
-              vote_average={item.vote_average}
-              vote_count={item.vote_count}
+              imagePath={baseImagePath('w342', item.poster_path)}
             />
-          );
-        }}
-      />
-      <CategoryHeader title={'Popular'} />
-      <FlatList
-        data={popularMoviesList}
-        keyExtractor={(item) => item.id.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        bounces={false}
-        contentContainerStyle={styles.containerGap36}
-        renderItem={({item, index}) => (
-          <SubMovieCard
-            shouldMarginatedAtEnd={true}
-            cardFunction={() => {
-              navigation.push('MovieDetails', {movieid: item.id});
-            }}
-            cardWidth={width / 3}
-            isFirst={index === 0}
-            isLast={index === popularMoviesList.length - 1}
-            title={item.original_title}
-            imagePath={baseImagePath('w342', item.poster_path)}
-          />
-        )}
-      />
-      <CategoryHeader title={'Upcoming'} />
-      <FlatList
-        data={upcomingMoviesList}
-        keyExtractor={(item) => item.id.toString()}
-        horizontal
-        bounces={false}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.containerGap36}
-        renderItem={({item, index}) => (
-          <SubMovieCard
-            shouldMarginatedAtEnd={true}
-            cardFunction={() => {
-              navigation.push('MovieDetails', {movieid: item.id});
-            }}
-            cardWidth={width / 3}
-            isFirst={index === 0}
-            isLast={index === upcomingMoviesList.length - 1}
-            title={item.original_title}
-            imagePath={baseImagePath('w342', item.poster_path)}
-          />
-        )}
-      />
+          )}
+        />
+        <CategoryHeader title={'Upcoming'} />
+        <FlatList
+          data={upcomingMoviesList}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal
+          bounces={false}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.containerGap36}
+          renderItem={({item, index}) => (
+            <SubMovieCard
+              shouldMarginatedAtEnd={true}
+              cardFunction={() => {
+                navigation.push('MovieDetails', {movieid: item.id});
+              }}
+              cardWidth={width / 3}
+              isFirst={index === 0}
+              isLast={index === upcomingMoviesList.length - 1}
+              title={item.original_title}
+              imagePath={baseImagePath('w342', item.poster_path)}
+            />
+          )}
+        />
+      </View>
     </ScrollView>
   );
 };

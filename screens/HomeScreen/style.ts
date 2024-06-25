@@ -23,6 +23,24 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
   },
+  categoryContainer: {
+    paddingHorizontal: SPACING.space_36,
+  },
+  categoryBtn: {
+    paddingHorizontal: SPACING.space_32,
+    paddingVertical: SPACING.space_4,
+    borderRadius: BORDERRADIUS.radius_25,
+    marginHorizontal: SPACING.space_8,
+    backgroundColor: COLORS.BlackRGB50,
+  },
+  selectedCategoryBtn: {
+    backgroundColor: COLORS.Orange,
+  },
+  categoryText: {
+    fontFamily: FONTFAMILY.poppins_medium,
+    fontSize: FONTSIZE.size_14,
+    color: COLORS.White,
+  },
   menuIcon: {
     padding: SPACING.space_10,
     backgroundColor: COLORS.BlackRGB50,
