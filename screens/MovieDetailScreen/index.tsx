@@ -1,17 +1,28 @@
-import { ActivityIndicator, FlatList, Image, ImageBackground, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { getMovieCastDetails, getMovieDetails } from '../../api/fetchAPi';
-import { styles } from './style';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  ImageBackground,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {getMovieCastDetails, getMovieDetails} from '../../api/fetchAPi';
+import {styles} from './style';
 import AppHeader from '../../components/AppHeader';
 import * as IconsSolid from 'react-native-heroicons/solid';
-import { COLORS, FONTSIZE, SPACING } from '../../theme/theme';
-import { baseImagePath } from '../../api/enpoint';
+import {COLORS, FONTSIZE, SPACING} from '../../theme/theme';
+import {baseImagePath} from '../../api/enpoint';
 import CategoryHeader from '../../components/CategoryHeader/Index';
 import ActorCastCard from '../../components/ActorCast';
-import { LinearGradient } from 'expo-linear-gradient';
+import {LinearGradient} from 'expo-linear-gradient';
 
-const MovieDetailScreen = ({navigation, route} : any)  => {
-    const [movieData, setMovieData] = useState<any>(undefined);
+const MovieDetailScreen = ({navigation, route}: any) => {
+  const [movieData, setMovieData] = useState<any>(undefined);
   const [movieCastData, setmovieCastData] = useState<any>(undefined);
 
   useEffect(() => {
@@ -39,20 +50,17 @@ const MovieDetailScreen = ({navigation, route} : any)  => {
         bounces={false}
         showsVerticalScrollIndicator={false}>
         <View style={styles.appHeaderContainer}>
-          <AppHeader
-            header={''}
-            action={() => navigation.goBack()}
-          />
+          <AppHeader header={''} action={() => navigation.goBack()} />
         </View>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size={'large'} color={COLORS.Orange} />
         </View>
       </ScrollView>
     );
-    }
+  }
 
-    return (
-        <ScrollView
+  return (
+    <ScrollView
       style={styles.container}
       bounces={false}
       showsVerticalScrollIndicator={false}>
@@ -68,10 +76,7 @@ const MovieDetailScreen = ({navigation, route} : any)  => {
             colors={[COLORS.BlackRGB10, COLORS.Black]}
             style={styles.linearGradient}>
             <View style={styles.appHeaderContainer}>
-              <AppHeader
-                header={''}
-                action={() => navigation.goBack()}
-              />
+              <AppHeader header={''} action={() => navigation.goBack()} />
             </View>
           </LinearGradient>
         </ImageBackground>
@@ -83,7 +88,11 @@ const MovieDetailScreen = ({navigation, route} : any)  => {
       </View>
 
       <View style={styles.timeContainer}>
-        <IconsSolid.ClockIcon style={{marginRight: SPACING.space_8}} size={FONTSIZE.size_20} color={COLORS.WhiteRGBA50}/>
+        <IconsSolid.ClockIcon
+          style={{marginRight: SPACING.space_8}}
+          size={FONTSIZE.size_20}
+          color={COLORS.WhiteRGBA50}
+        />
         <Text style={styles.runtimeText}>
           {Math.floor(movieData?.runtime / 60)}h{' '}
           {Math.floor(movieData?.runtime % 60)}m
@@ -106,7 +115,7 @@ const MovieDetailScreen = ({navigation, route} : any)  => {
 
       <View style={styles.infoContainer}>
         <View style={styles.rateContainer}>
-        <IconsSolid.StarIcon  size={FONTSIZE.size_20} color={COLORS.Yellow}/>
+          <IconsSolid.StarIcon size={FONTSIZE.size_20} color={COLORS.Yellow} />
           <Text style={styles.runtimeText}>
             {movieData?.vote_average.toFixed(1)} ({movieData?.vote_count})
           </Text>
@@ -141,7 +150,7 @@ const MovieDetailScreen = ({navigation, route} : any)  => {
           )}
         />
 
-        <View>
+        <View style={styles.playContainer}>
           <TouchableOpacity
             style={styles.buttonBG}
             onPress={() => {
@@ -150,11 +159,21 @@ const MovieDetailScreen = ({navigation, route} : any)  => {
                 PosterImage: baseImagePath('original', movieData.poster_path),
               });
             }}>
-            <Text style={styles.buttonText}>Select Seats</Text>
+            <Text style={styles.buttonText}>Tonton di Bioskop</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.buttonBG}
+            onPress={() => {
+              navigation.push('SeatBooking', {
+                BgImage: baseImagePath('w780', movieData.backdrop_path),
+                PosterImage: baseImagePath('original', movieData.poster_path),
+              });
+            }}>
+            <Text style={styles.buttonText}>Tonton di Streaming</Text>
           </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
-    );
-}
+  );
+};
 export default MovieDetailScreen;

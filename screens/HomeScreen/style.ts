@@ -42,7 +42,7 @@ export const styles = StyleSheet.create({
     color: COLORS.White,
   },
   categoryContentContainer: {
-    paddingHorizontal: SPACING.space_12,
+    paddingHorizontal: SPACING.space_8,
     paddingTop: SPACING.space_24,
   },
   menuIcon: {

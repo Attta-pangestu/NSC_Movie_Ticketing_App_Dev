@@ -343,7 +343,6 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
         </View>
       )}
 
-      {/* untuk kategori yang dipilih selain 'All' */}
       {selectedCategory !== 'All' && (
         <FlatList
           data={getCategoryData()}
@@ -353,11 +352,12 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
           contentContainerStyle={styles.categoryContentContainer}
           renderItem={({item}) => (
             <SubMovieCard
-              shouldMarginatedAtEnd={true}
+              shouldMarginatedAtEnd={false}
+              shouldMarginatedAround={true}
               cardFunction={() => {
                 navigation.push('MovieDetails', {movieid: item.id});
               }}
-              cardWidth={width / 3 - SPACING.space_16}
+              cardWidth={width / 3 - SPACING.space_8 * 3}
               title={item.original_title}
               imagePath={baseImagePath('w342', item.poster_path)}
             />
