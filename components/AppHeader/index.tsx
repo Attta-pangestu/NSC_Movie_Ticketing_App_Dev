@@ -8,10 +8,9 @@ import { FONTSIZE } from '../../theme/theme';
 type AppHeaderProps = {
   header: string;
   action: () => void;
-  Icon: React.ReactNode;
 };
 
-const AppHeader = ({header, action, Icon} : AppHeaderProps) => {
+const AppHeader = ({header, action} : AppHeaderProps) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.iconBG} onPress={() => action()}>

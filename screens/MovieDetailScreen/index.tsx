@@ -42,7 +42,6 @@ const MovieDetailScreen = ({navigation, route} : any)  => {
           <AppHeader
             header={''}
             action={() => navigation.goBack()}
-            Icon={<IconsSolid.XCircleIcon size={FONTSIZE.size_20} color={COLORS.Orange} />}
           />
         </View>
         <View style={styles.loadingContainer}>
@@ -72,7 +71,6 @@ const MovieDetailScreen = ({navigation, route} : any)  => {
               <AppHeader
                 header={''}
                 action={() => navigation.goBack()}
-                Icon={<IconsSolid.XCircleIcon size={FONTSIZE.size_20} color={COLORS.Orange} />}
               />
             </View>
           </LinearGradient>
