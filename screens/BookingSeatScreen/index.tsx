@@ -1,4 +1,5 @@
 import {
+  FlatList,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -7,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import React, {useState} from 'react';
-import {generateDate, generateSeats} from '../../utils';
+import {generateDate, generateSeats, timeArray} from '../../utils';
 import {ImageBackground} from 'react-native';
 import {styles} from './style';
 import {LinearGradient} from 'expo-linear-gradient';
@@ -38,10 +39,14 @@ const BookingSeatScreen = ({navigation, route}: any) => {
           setSelectedSeatArray(array);
         }
       }
-      setPrice(array.length * 5.0);
+      setPrice(array.length * 55);
       setTwoSeatArray(temp);
     }
   };
+
+  function bookSeatHandler() {
+    console.log('Handle book');
+  }
 
   return (
     <ScrollView
@@ -61,7 +66,7 @@ const BookingSeatScreen = ({navigation, route}: any) => {
             </View>
           </LinearGradient>
         </ImageBackground>
-        <Text style={styles.screenText}>Screen this side</Text>
+        <Text style={styles.screenText}>Sisi layar disini</Text>
       </View>
 
       <View style={styles.seatContainer}>
@@ -78,7 +83,13 @@ const BookingSeatScreen = ({navigation, route}: any) => {
                       }}>
                       <IconsSolid.ArchiveBoxIcon
                         fontSize={FONTSIZE.size_24}
-                        color={COLORS.White}
+                        color={
+                          subitem.selected
+                            ? COLORS.Orange
+                            : subitem.taken
+                              ? COLORS.Grey
+                              : COLORS.White
+                        }
                       />
                     </TouchableOpacity>
                   );
@@ -89,31 +100,25 @@ const BookingSeatScreen = ({navigation, route}: any) => {
         </View>
         <View style={styles.seatRadioContainer}>
           <View style={styles.radioContainer}>
-            <IconsSolid.RadioIcon
-              style={{
-                flexDirection: 'row',
-                marginTop: SPACING.space_36,
-                marginBottom: SPACING.space_10,
-                alignItems: 'center',
-                justifyContent: 'space-evenly',
-              }}
+            <IconsSolid.ArchiveBoxIcon
+              fontSize={FONTSIZE.size_20}
               color={COLORS.White}
             />
-            <Text style={styles.radioText}>Available</Text>
+            <Text style={styles.radioText}>Tersedia</Text>
           </View>
           <View style={styles.radioContainer}>
-            <CustomIcon
-              name="radio"
-              style={[styles.radioIcon, {color: COLORS.Grey}]}
+            <IconsSolid.ArchiveBoxIcon
+              fontSize={FONTSIZE.size_20}
+              color={COLORS.Grey}
             />
-            <Text style={styles.radioText}>Taken</Text>
+            <Text style={styles.radioText}>Booked</Text>
           </View>
           <View style={styles.radioContainer}>
-            <CustomIcon
-              name="radio"
-              style={[styles.radioIcon, {color: COLORS.Orange}]}
+            <IconsSolid.ArchiveBoxIcon
+              fontSize={FONTSIZE.size_20}
+              color={COLORS.Orange}
             />
-            <Text style={styles.radioText}>Selected</Text>
+            <Text style={styles.radioText}>Dipilih</Text>
           </View>
         </View>
       </View>
@@ -181,11 +186,11 @@ const BookingSeatScreen = ({navigation, route}: any) => {
 
       <View style={styles.buttonPriceContainer}>
         <View style={styles.priceContainer}>
-          <Text style={styles.totalPriceText}>Total Price</Text>
-          <Text style={styles.price}>$ {price}.00</Text>
+          <Text style={styles.totalPriceText}>Total Pembayaran</Text>
+          <Text style={styles.price}>Rp {price}.000 </Text>
         </View>
-        <TouchableOpacity onPress={BookSeats}>
-          <Text style={styles.buttonText}>Buy Tickets</Text>
+        <TouchableOpacity onPress={bookSeatHandler}>
+          <Text style={styles.buttonText}>Checkout Ticket</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

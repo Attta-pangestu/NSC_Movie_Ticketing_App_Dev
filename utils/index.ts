@@ -5,7 +5,15 @@ export type DateResult = {
 
 export const generateDate = (): DateResult[] => {
   const date = new Date();
-  let weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  let weekday = [
+    'Minggu',
+    'Senin',
+    'Selasa',
+    'Rabu',
+    'Kamis',
+    'Jumat',
+    'Sabtu',
+  ];
   let weekdays: DateResult[] = [];
   for (let i = 0; i < 7; i++) {
     let tempDate: DateResult = {

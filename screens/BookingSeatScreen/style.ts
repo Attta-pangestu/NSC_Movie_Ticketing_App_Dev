@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
   screenText: {
     textAlign: 'center',
     fontSize: FONTSIZE.size_10,
-    color: COLORS.WhiteRGBA15,
+    color: COLORS.White,
   },
   seatContainer: {
     marginVertical: SPACING.space_20,
@@ -46,10 +46,7 @@ export const styles = StyleSheet.create({
     gap: SPACING.space_10,
     alignItems: 'center',
   },
-  radioIcon: {
-    fontSize: FONTSIZE.size_20,
-    color: COLORS.White,
-  },
+
   radioText: {
     fontSize: FONTSIZE.size_12,
     color: COLORS.White,
