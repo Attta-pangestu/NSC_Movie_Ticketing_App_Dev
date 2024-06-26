@@ -19,7 +19,7 @@ import {
 import {styles} from './style';
 import AppHeader from '../../components/AppHeader';
 import * as IconsSolid from 'react-native-heroicons/solid';
-import {COLORS, FONTSIZE, SPACING} from '../../theme/theme';
+import {BORDERRADIUS, COLORS, FONTSIZE, SPACING} from '../../theme/theme';
 import {baseImagePath} from '../../api/enpoint';
 import CategoryHeader from '../../components/CategoryHeader/Index';
 import ActorCastCard from '../../components/ActorCast';
@@ -49,10 +49,10 @@ const MovieDetailScreen = ({navigation, route}: any) => {
   }, [route.params.movieid]);
 
   if (
-    movieData == undefined &&
-    movieData == null &&
-    movieCastData == undefined &&
-    movieCastData == null
+    movieData === undefined &&
+    movieData === null &&
+    movieCastData === undefined &&
+    movieCastData === null
   ) {
     return (
       <ScrollView
@@ -92,10 +92,15 @@ const MovieDetailScreen = ({navigation, route}: any) => {
           </LinearGradient>
         </ImageBackground>
         <View style={styles.imageBG}></View>
-        <Image
-          source={{uri: baseImagePath('w342', movieData?.poster_path)}}
-          style={styles.cardImage}
-        />
+        <View style={styles.posterContainer}>
+          <TouchableOpacity style={styles.playBtnContainer} activeOpacity={0.7}>
+            <IconsSolid.PlayIcon size={40} color={COLORS.White} />
+          </TouchableOpacity>
+          <Image
+            source={{uri: baseImagePath('w342', movieData?.poster_path)}}
+            style={styles.cardImage}
+          />
+        </View>
       </View>
 
       <View style={styles.timeContainer}>
@@ -134,7 +139,7 @@ const MovieDetailScreen = ({navigation, route}: any) => {
             {movieData?.release_date.substring(8, 10)}{' '}
             {new Date(movieData?.release_date).toLocaleString('default', {
               month: 'long',
-            })}{' '}
+            })}
             {movieData?.release_date.substring(0, 4)}
           </Text>
         </View>
@@ -152,8 +157,8 @@ const MovieDetailScreen = ({navigation, route}: any) => {
             <ActorCastCard
               shouldMarginatedAtEnd={true}
               cardWidth={80}
-              isFirst={index == 0 ? true : false}
-              isLast={index == movieCastData?.length - 1 ? true : false}
+              isFirst={index === 0 ? true : false}
+              isLast={index === movieCastData?.length - 1 ? true : false}
               imagePath={baseImagePath('w185', item.profile_path)}
               title={item.original_name}
               subtitle={item.character}

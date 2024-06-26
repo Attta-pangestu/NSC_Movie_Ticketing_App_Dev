@@ -114,4 +114,18 @@ export const styles = StyleSheet.create({
     gap: SPACING.space_24,
     justifyContent: 'center',
   },
+  posterContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  playBtnContainer: {
+    padding: 10,
+    position: 'absolute',
+    top: -190,
+    borderRadius: BORDERRADIUS.radius_50,
+    overflow: 'hidden',
+    backgroundColor: COLORS.Orange,
+    zIndex: 50,
+  },
 });

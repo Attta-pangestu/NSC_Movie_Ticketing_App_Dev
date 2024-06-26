@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import MovieDetailScreen from './screens/MovieDetailScreen';
 import BookingSeatScreen from './screens/BookingSeatScreen';
 import TabNavigator from './navigator/TabNavigator';
 import {useFonts} from 'expo-font';
 import {ActivityIndicator} from 'react-native';
 import {COLORS} from './theme/theme';
+import MovieDetailScreen from './screens/MovieDetailScreen';
 
 const Stack = createNativeStackNavigator();
 

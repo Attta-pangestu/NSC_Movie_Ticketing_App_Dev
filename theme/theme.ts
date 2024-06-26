@@ -123,6 +123,7 @@ interface BorderRadius {
   radius_15: number;
   radius_20: number;
   radius_25: number;
+  radius_50: number;
 }
 
 export const BORDERRADIUS: BorderRadius = {
@@ -132,4 +133,5 @@ export const BORDERRADIUS: BorderRadius = {
   radius_15: 15,
   radius_20: 20,
   radius_25: 25,
+  radius_50: 50,
 };
