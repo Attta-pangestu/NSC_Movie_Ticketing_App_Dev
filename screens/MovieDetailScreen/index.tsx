@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -16,18 +16,18 @@ import {
   getMovieDetails,
   getMovieTrailer,
 } from '../../api/fetchAPi';
-import { styles } from './style';
+import {styles} from './style';
 import AppHeader from '../../components/AppHeader';
 import * as IconsSolid from 'react-native-heroicons/solid';
-import { COLORS, FONTSIZE, SPACING } from '../../theme/theme';
-import { baseImagePath } from '../../api/enpoint';
+import {COLORS, FONTSIZE, SPACING} from '../../theme/theme';
+import {baseImagePath} from '../../api/enpoint';
 import CategoryHeader from '../../components/CategoryHeader/Index';
 import ActorCastCard from '../../components/ActorCast';
-import { LinearGradient } from 'expo-linear-gradient';
+import {LinearGradient} from 'expo-linear-gradient';
 import StarRating from './_component/StarRating';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const MovieDetailScreen = ({ navigation, route }: any) => {
+const MovieDetailScreen = ({navigation, route}: any) => {
   const [movieData, setMovieData] = useState<any>(undefined);
   const [movieCastData, setmovieCastData] = useState<any>(undefined);
   const [trailerUrl, setTrailerUrl] = useState<string | null>(null);
@@ -68,7 +68,6 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
       console.error(error);
     }
   };
-
 
   if (
     movieData === undefined &&
@@ -113,22 +112,31 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
           </LinearGradient>
         </ImageBackground>
         <View style={styles.posterContainer}>
-          <View>
+          <View style={{position: 'relative'}}>
             <Image
-              source={{ uri: baseImagePath('w342', movieData?.poster_path) }}
+              source={{uri: baseImagePath('w342', movieData?.poster_path)}}
               style={styles.cardImage}
             />
             <View style={styles.ratingContainer}>
               <StarRating rating={rating} setRating={setRating} />
-              <Text style={styles.ratingText}>{rating.toFixed(1)} / 5</Text>
+              <Text style={styles.ratingText}>{rating.toFixed(1)} / 10</Text>
+            </View>
+            <Text style={styles.tagline}>"{movieData?.tagline}"</Text>
+            <View style={styles.posterBtnContainer}>
+              <TouchableOpacity style={styles.posterBtnAction}>
+                <Text style={styles.btnPlayingText}>Tonton di Bioskop</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.posterBtnAction}>
+                <Text style={styles.btnPlayingText}>Streaming Now</Text>
+              </TouchableOpacity>
             </View>
           </View>
           <View style={styles.posterInfoContainer}>
             <Text style={styles.title}>{movieData?.original_title}</Text>
-            <View style={styles.listInfoContainer}>
-              <View style={styles.infoItemContainer}>
+            <View style={styles.listInfoPosterContainer}>
+              <View style={styles.posterInfoItemContainer}>
                 <IconsSolid.CalendarIcon
-                  style={{ marginRight: SPACING.space_8 }}
+                  style={{marginRight: SPACING.space_8}}
                   size={FONTSIZE.size_20}
                   color={COLORS.WhiteRGBA50}
                 />
@@ -136,9 +144,9 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
                   {movieData?.release_date}
                 </Text>
               </View>
-              <View style={styles.infoItemContainer}>
+              <View style={styles.posterInfoItemContainer}>
                 <IconsSolid.ClockIcon
-                  style={{ marginRight: SPACING.space_8 }}
+                  style={{marginRight: SPACING.space_8}}
                   size={FONTSIZE.size_20}
                   color={COLORS.WhiteRGBA50}
                 />
@@ -147,7 +155,7 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
                   {Math.floor(movieData?.runtime % 60)}m
                 </Text>
               </View>
-              <View style={styles.infoItemContainer}>
+              <View style={styles.posterInfoItemContainer}>
                 <View style={styles.genreContainer}>
                   {movieData?.genres.map((item: any) => {
                     return (
@@ -163,25 +171,57 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
         </View>
       </View>
 
-      <View style={{ marginTop: 75 }}>
-        <Text style={styles.tagline}>{movieData?.tagline || movieData?.title}</Text>
-      </View>
-
       <View style={styles.infoContainer}>
-        <View style={styles.rateContainer}>
-          <IconsSolid.StarIcon size={FONTSIZE.size_20} color={COLORS.Yellow} />
-          <Text style={styles.runtimeText}>
-            {movieData?.vote_average.toFixed(1)} ({movieData?.vote_count})
-          </Text>
-          <Text style={styles.runtimeText}>
-            {movieData?.release_date.substring(8, 10)}{' '}
-            {new Date(movieData?.release_date).toLocaleString('default', {
-              month: 'long',
-            })}
-            {movieData?.release_date.substring(0, 4)}
-          </Text>
+        <View style={styles.movieActionContainer}>
+          <TouchableOpacity
+            style={styles.movieActionItem}
+            activeOpacity={0.7}
+            onPress={() => saveBookmark(movieData)}>
+            <IconsSolid.BookmarkIcon
+              size={FONTSIZE.size_24}
+              color={COLORS.White}
+            />
+            <Text style={{color: COLORS.WhiteRGBA50, textAlign: 'center'}}>
+              Bookmark
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.movieActionItem}
+            activeOpacity={0.7}
+            onPress={() => {}}>
+            <IconsSolid.HeartIcon
+              size={FONTSIZE.size_24}
+              color={COLORS.White}
+            />
+            <Text style={{color: COLORS.WhiteRGBA50, textAlign: 'center'}}>
+
+              Menyukai
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.movieActionItem}
+            activeOpacity={0.7}
+            onPress={() => {}}>
+            <IconsSolid.ChatBubbleBottomCenterIcon
+              size={FONTSIZE.size_24}
+              color={COLORS.White}
+            />
+            <Text style={styles.movieActionText}> Komentari </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.movieActionItem}
+            activeOpacity={0.7}
+            onPress={() => {}}>
+            <IconsSolid.ShareIcon
+              size={FONTSIZE.size_24}
+              color={COLORS.White}
+            />
+            <Text style={styles.movieActionText}> Berbagi </Text>
+          </TouchableOpacity>
         </View>
-        <Text style={styles.descriptionText}>{movieData?.overview}</Text>
+        <View style={{marginTop: SPACING.space_8}}>
+          <Text style={styles.descriptionText}>{movieData?.overview}</Text>
+        </View>
       </View>
 
       <View>
@@ -191,7 +231,7 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
           keyExtractor={(item: any) => item.id}
           horizontal
           contentContainerStyle={styles.containerGap24}
-          renderItem={({ item, index }) => (
+          renderItem={({item, index}) => (
             <ActorCastCard
               shouldMarginatedAtEnd={true}
               cardWidth={80}
@@ -229,23 +269,17 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
         visible={modalVisible}
         animationType="slide"
         onRequestClose={() => setModalVisible(false)}>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           {trailerUrl ? (
             <Text>Playing</Text>
           ) : (
             <Text>Trailer not available</Text>
           )}
           <TouchableOpacity onPress={() => setModalVisible(false)}>
-            <Text style={{ color: 'red', marginTop: 20 }}>Close</Text>
+            <Text style={{color: 'red', marginTop: 20}}>Close</Text>
           </TouchableOpacity>
         </View>
       </Modal>
-      {/* Bookmark Icon */}
-      <TouchableOpacity
-        style={styles.bookmarkIcon}
-        onPress={() => saveBookmark(movieData)}>
-        <IconsSolid.BookmarkIcon size={40} color={COLORS.White} />
-      </TouchableOpacity>
     </ScrollView>
   );
 };

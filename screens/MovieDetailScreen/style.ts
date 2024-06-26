@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import {
   BORDERRADIUS,
   COLORS,
@@ -9,6 +9,7 @@ import {
 
 export const styles = StyleSheet.create({
   container: {
+    position: 'relative',
     display: 'flex',
     flex: 1,
     backgroundColor: COLORS.Black,
@@ -34,10 +35,10 @@ export const styles = StyleSheet.create({
   },
   cardImage: {
     width: 160,
-    aspectRatio: 200 / 200,
+    aspectRatio: 200 / 300,
     borderRadius: BORDERRADIUS.radius_20,
   },
-  infoItemContainer: {
+  posterInfoItemContainer: {
     display: 'flex',
     flexDirection: 'row',
   },
@@ -49,14 +50,12 @@ export const styles = StyleSheet.create({
   title: {
     width: '80%',
     fontFamily: FONTFAMILY.poppins_bold,
-    fontSize: FONTSIZE.size_20,
+    fontSize: FONTSIZE.size_30,
     color: COLORS.White,
     marginHorizontal: SPACING.space_36,
     marginVertical: SPACING.space_4,
     textAlign: 'left',
     letterSpacing: 1.2,
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
   },
   genreContainer: {
     flex: 1,
@@ -79,16 +78,20 @@ export const styles = StyleSheet.create({
     color: COLORS.WhiteRGBA75,
   },
   tagline: {
-    fontSize: FONTSIZE.size_14,
+    width: 160,
+    fontFamily: FONTFAMILY.poppins_semibold,
+    fontSize: FONTSIZE.size_16,
     fontStyle: 'italic',
+    textDecorationLine: 'underline',
     color: COLORS.White,
-    marginHorizontal: SPACING.space_36,
     marginVertical: SPACING.space_15,
-    textAlign: 'center',
+    textAlign: 'left',
+    marginBottom: 70,
   },
   infoContainer: {
     minHeight: 200,
-    marginHorizontal: SPACING.space_24,
+    marginHorizontal: SPACING.space_32,
+    marginTop: 280,
   },
   rateContainer: {
     flexDirection: 'row',
@@ -144,9 +147,9 @@ export const styles = StyleSheet.create({
     marginLeft: -25,
     width: 200,
   },
-  listInfoContainer: {
+  listInfoPosterContainer: {
     flexDirection: 'column',
-    marginTop: -10,
+    marginTop: SPACING.space_4,
     marginLeft: SPACING.space_32,
     gap: SPACING.space_2,
   },
@@ -170,5 +173,47 @@ export const styles = StyleSheet.create({
     borderRadius: 50,
     padding: SPACING.space_12,
     elevation: 5,
+  },
+  posterBtnAction: {
+    backgroundColor: COLORS.Orange,
+    width: 170,
+    borderRadius: BORDERRADIUS.radius_25,
+    paddingVertical: SPACING.space_4,
+  },
+  btnPlayingText: {
+    fontFamily: FONTFAMILY.poppins_medium,
+    color: COLORS.White,
+    textAlign: 'center',
+  },
+  posterBtnContainer: {
+    position: 'absolute',
+    bottom: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 10,
+    marginLeft: -5,
+  },
+  movieActionContainer: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: SPACING.space_16,
+    marginVertical: SPACING.space_24,
+    paddingVertical: SPACING.space_8,
+    borderWidth: 1,
+    borderRadius: BORDERRADIUS.radius_25,
+    borderColor: COLORS.WhiteRGBA50,
+  },
+  movieActionItem: {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  movieActionText: {
+    fontFamily: FONTFAMILY.poppins_medium,
+    fontSize: FONTSIZE.size_12,
+    color: COLORS.WhiteRGBA50,
+    textAlign: 'center',
   },
 });
