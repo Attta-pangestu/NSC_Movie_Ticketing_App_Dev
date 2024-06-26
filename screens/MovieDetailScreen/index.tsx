@@ -35,14 +35,20 @@ const MovieDetailScreen = ({navigation, route}: any) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [rating, setRating] = useState<number>(0);
   const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
-const [isLiked, setIsLiked] = useState<boolean>(false);
-
+  const [isLiked, setIsLiked] = useState<boolean>(false);
 
   useEffect(() => {
     (async () => {
       const tempMovieData = await getMovieDetails(route.params.movieid);
       setMovieData(tempMovieData);
       setRating(tempMovieData.vote_average);
+      const bookmarks = await AsyncStorage.getItem('bookmarks');
+    const bookmarksArray = bookmarks ? JSON.parse(bookmarks) : [];
+    setIsBookmarked(bookmarksArray.some((item: any) => item.id === route.params.movieid));
+
+    const likes = await AsyncStorage.getItem('likes');
+    const likesArray = likes ? JSON.parse(likes) : [];
+    setIsLiked(likesArray.some((item: any) => item.id === route.params.movieid));
     })();
 
     (async () => {
@@ -54,7 +60,7 @@ const [isLiked, setIsLiked] = useState<boolean>(false);
       const trailerUrl = await getMovieTrailer(route.params.movieid);
       setTrailerId(trailerUrl);
     })();
-  }, [route.params.movieid]);
+  }, [route.params.movieid, isBookmarked, isLiked]);
 
   const saveBookmark = async (movie: any) => {
     try {
@@ -64,8 +70,10 @@ const [isLiked, setIsLiked] = useState<boolean>(false);
         ...movie,
         poster_path: baseImagePath('w342', movie.poster_path),
       };
-  
-      const index = bookmarksArray.findIndex((item: any) => item.id === movie.id);
+
+      const index = bookmarksArray.findIndex(
+        (item: any) => item.id === movie.id,
+      );
       if (index !== -1) {
         bookmarksArray.splice(index, 1);
         setIsBookmarked(false);
@@ -73,14 +81,14 @@ const [isLiked, setIsLiked] = useState<boolean>(false);
         bookmarksArray.push(movieData);
         setIsBookmarked(true);
       }
-  
+
       await AsyncStorage.setItem('bookmarks', JSON.stringify(bookmarksArray));
       alert(`Movie ${isBookmarked ? 'removed from' : 'added to'} bookmarks!`);
     } catch (error) {
       console.error(error);
     }
   };
-  
+
   const toggleLike = async (movie: any) => {
     try {
       const likes = await AsyncStorage.getItem('likes');
@@ -98,7 +106,6 @@ const [isLiked, setIsLiked] = useState<boolean>(false);
       console.error(error);
     }
   };
-  
 
   if (
     movieData === undefined &&
@@ -222,7 +229,7 @@ const [isLiked, setIsLiked] = useState<boolean>(false);
             onPress={() => toggleLike(movieData)}>
             <IconsSolid.HeartIcon
               size={FONTSIZE.size_24}
-              color={isLiked ? 'red' : COLORS.White}
+              color={isLiked ? COLORS.Orange : COLORS.White}
             />
             <Text style={{color: COLORS.WhiteRGBA50, textAlign: 'center'}}>
               Menyukai
@@ -236,7 +243,7 @@ const [isLiked, setIsLiked] = useState<boolean>(false);
               size={FONTSIZE.size_24}
               color={COLORS.White}
             />
-            <Text style={styles.movieActionText }> Komentari </Text>
+            <Text style={styles.movieActionText}> Komentari </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.movieActionItem}
@@ -252,11 +259,7 @@ const [isLiked, setIsLiked] = useState<boolean>(false);
 
         <View>
           {trailerId && (
-            <YoutubePlayer
-              height={300}
-              play={true}
-              videoId={trailerId}
-            />
+            <YoutubePlayer height={300} play={true} videoId={trailerId} />
           )}
         </View>
 
