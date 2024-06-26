@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
   BORDERRADIUS,
   COLORS,
@@ -34,8 +34,8 @@ export const styles = StyleSheet.create({
   },
   cardImage: {
     width: 160,
-    aspectRatio: 200 / 300,
-    borderRadius: BORDERRADIUS.radius_25,
+    aspectRatio: 200 / 200,
+    borderRadius: BORDERRADIUS.radius_20,
   },
   infoItemContainer: {
     display: 'flex',
@@ -49,10 +49,10 @@ export const styles = StyleSheet.create({
   title: {
     width: '80%',
     fontFamily: FONTFAMILY.poppins_bold,
-    fontSize: FONTSIZE.size_30,
+    fontSize: FONTSIZE.size_20,
     color: COLORS.White,
     marginHorizontal: SPACING.space_36,
-    marginVertical: SPACING.space_15,
+    marginVertical: SPACING.space_4,
     textAlign: 'left',
     letterSpacing: 1.2,
     textOverflow: 'ellipsis',
@@ -87,6 +87,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
   infoContainer: {
+    minHeight: 200,
     marginHorizontal: SPACING.space_24,
   },
   rateContainer: {
@@ -159,5 +160,15 @@ export const styles = StyleSheet.create({
     fontSize: FONTSIZE.size_14,
     color: COLORS.White,
     marginLeft: SPACING.space_8,
+  },
+  bookmarkIcon: {
+    position: 'absolute',
+    bottom: 250,
+    right: 20,
+    zIndex: 1000,
+    backgroundColor: COLORS.Orange,
+    borderRadius: 50,
+    padding: SPACING.space_12,
+    elevation: 5,
   },
 });

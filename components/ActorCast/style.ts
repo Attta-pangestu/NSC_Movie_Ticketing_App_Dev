@@ -1,12 +1,12 @@
-import {StyleSheet} from 'react-native';
-import {BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE} from '../../theme/theme';
+import { StyleSheet } from 'react-native';
+import { BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE } from '../../theme/theme';
 
 export const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
   },
   cardImage: {
-    aspectRatio: 1920 / 2880,
+    aspectRatio: 1920 / 1920,
     borderRadius: BORDERRADIUS.radius_25 * 4,
   },
   title: {

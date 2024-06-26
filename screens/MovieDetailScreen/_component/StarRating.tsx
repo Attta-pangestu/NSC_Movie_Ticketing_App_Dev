@@ -1,14 +1,14 @@
 import React from 'react';
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import * as IconsSolid from 'react-native-heroicons/solid';
-import {COLORS, FONTSIZE} from '../../../theme/theme';
+import { COLORS, FONTSIZE } from '../../../theme/theme';
 
 type StarRatingProps = {
   rating: number;
   setRating: (rating: number) => void;
 };
 
-const StarRating: React.FC<StarRatingProps> = ({rating, setRating}) => {
+const StarRating: React.FC<StarRatingProps> = ({ rating, setRating }) => {
   const stars = [1, 2, 3, 4, 5];
   return (
     <View style={styles.starContainer}>
