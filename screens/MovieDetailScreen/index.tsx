@@ -19,22 +19,25 @@ import {
 import {styles} from './style';
 import AppHeader from '../../components/AppHeader';
 import * as IconsSolid from 'react-native-heroicons/solid';
-import {BORDERRADIUS, COLORS, FONTSIZE, SPACING} from '../../theme/theme';
+import {COLORS, FONTSIZE, SPACING} from '../../theme/theme';
 import {baseImagePath} from '../../api/enpoint';
 import CategoryHeader from '../../components/CategoryHeader/Index';
 import ActorCastCard from '../../components/ActorCast';
 import {LinearGradient} from 'expo-linear-gradient';
+import StarRating from './_component/StarRating';
 
 const MovieDetailScreen = ({navigation, route}: any) => {
   const [movieData, setMovieData] = useState<any>(undefined);
   const [movieCastData, setmovieCastData] = useState<any>(undefined);
   const [trailerUrl, setTrailerUrl] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [rating, setRating] = useState<number>(0);
 
   useEffect(() => {
     (async () => {
       const tempMovieData = await getMovieDetails(route.params.movieid);
       setMovieData(tempMovieData);
+      setRating(tempMovieData.vote_average);
     })();
 
     (async () => {
@@ -91,41 +94,61 @@ const MovieDetailScreen = ({navigation, route}: any) => {
             </View>
           </LinearGradient>
         </ImageBackground>
-        <View style={styles.imageBG}></View>
         <View style={styles.posterContainer}>
-          <TouchableOpacity style={styles.playBtnContainer} activeOpacity={0.7}>
+          {/* <TouchableOpacity style={styles.playBtnContainer} activeOpacity={0.7}>
             <IconsSolid.PlayIcon size={40} color={COLORS.White} />
-          </TouchableOpacity>
-          <Image
-            source={{uri: baseImagePath('w342', movieData?.poster_path)}}
-            style={styles.cardImage}
-          />
-        </View>
-      </View>
-
-      <View style={styles.timeContainer}>
-        <IconsSolid.ClockIcon
-          style={{marginRight: SPACING.space_8}}
-          size={FONTSIZE.size_20}
-          color={COLORS.WhiteRGBA50}
-        />
-        <Text style={styles.runtimeText}>
-          {Math.floor(movieData?.runtime / 60)}h{' '}
-          {Math.floor(movieData?.runtime % 60)}m
-        </Text>
-      </View>
-
-      <View>
-        <Text style={styles.title}>{movieData?.original_title}</Text>
-        <View style={styles.genreContainer}>
-          {movieData?.genres.map((item: any) => {
-            return (
-              <View style={styles.genreBox} key={item.id}>
-                <Text style={styles.genreText}>{item.name}</Text>
+          </TouchableOpacity> */}
+          <View>
+            <Image
+              source={{uri: baseImagePath('w342', movieData?.poster_path)}}
+              style={styles.cardImage}
+            />
+            <View style={styles.ratingContainer}>
+              <StarRating rating={rating} setRating={setRating} />
+              <Text style={styles.ratingText}>{rating.toFixed(1)} / 5</Text>
+            </View>
+          </View>
+          <View style={styles.posterInfoContainer}>
+            <Text style={styles.title}>{movieData?.original_title}</Text>
+            <View style={styles.listInfoContainer}>
+              <View style={styles.infoItemContainer}>
+                <IconsSolid.CalendarIcon
+                  style={{marginRight: SPACING.space_8}}
+                  size={FONTSIZE.size_20}
+                  color={COLORS.WhiteRGBA50}
+                />
+                <Text style={styles.runtimeText}>
+                  {movieData?.release_date}
+                </Text>
               </View>
-            );
-          })}
+              <View style={styles.infoItemContainer}>
+                <IconsSolid.ClockIcon
+                  style={{marginRight: SPACING.space_8}}
+                  size={FONTSIZE.size_20}
+                  color={COLORS.WhiteRGBA50}
+                />
+                <Text style={styles.runtimeText}>
+                  {Math.floor(movieData?.runtime / 60)}h{' '}
+                  {Math.floor(movieData?.runtime % 60)}m
+                </Text>
+              </View>
+              <View style={styles.infoItemContainer}>
+                <View style={styles.genreContainer}>
+                  {movieData?.genres.map((item: any) => {
+                    return (
+                      <View style={styles.genreBox} key={item.id}>
+                        <Text style={styles.genreText}>{item.name}</Text>
+                      </View>
+                    );
+                  })}
+                </View>
+              </View>
+            </View>
+          </View>
         </View>
+      </View>
+
+      <View style={{marginTop: 350}}>
         <Text style={styles.tagline}>{movieData?.tagline}</Text>
       </View>
 

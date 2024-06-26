@@ -1,5 +1,11 @@
 import {StyleSheet} from 'react-native';
-import {BORDERRADIUS, COLORS, FONTSIZE, SPACING} from '../../theme/theme';
+import {
+  BORDERRADIUS,
+  COLORS,
+  FONTFAMILY,
+  FONTSIZE,
+  SPACING,
+} from '../../theme/theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -27,46 +33,49 @@ export const styles = StyleSheet.create({
     height: '100%',
   },
   cardImage: {
-    width: '60%',
+    width: 160,
     aspectRatio: 200 / 300,
-    position: 'absolute',
-    bottom: 0,
-    alignSelf: 'center',
+    borderRadius: BORDERRADIUS.radius_25,
   },
-  timeContainer: {
+  infoItemContainer: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: SPACING.space_15,
   },
   runtimeText: {
+    fontFamily: FONTFAMILY.poppins_semibold,
     fontSize: FONTSIZE.size_14,
-    color: COLORS.White,
+    color: COLORS.WhiteRGBA50,
   },
   title: {
-    fontSize: FONTSIZE.size_24,
+    width: '80%',
+    fontFamily: FONTFAMILY.poppins_bold,
+    fontSize: FONTSIZE.size_30,
     color: COLORS.White,
     marginHorizontal: SPACING.space_36,
     marginVertical: SPACING.space_15,
-    textAlign: 'center',
+    textAlign: 'left',
+    letterSpacing: 1.2,
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
   genreContainer: {
     flex: 1,
     flexDirection: 'row',
-    gap: SPACING.space_20,
+    gap: SPACING.space_4,
     flexWrap: 'wrap',
-    justifyContent: 'center',
+    alignItems: 'center',
   },
   genreBox: {
     borderColor: COLORS.WhiteRGBA50,
     borderWidth: 1,
-    paddingHorizontal: SPACING.space_10,
+    paddingHorizontal: SPACING.space_8,
     paddingVertical: SPACING.space_4,
+    marginHorizontal: SPACING.space_2,
+    marginVertical: SPACING.space_2,
     borderRadius: BORDERRADIUS.radius_25,
   },
   genreText: {
-    fontSize: FONTSIZE.size_10,
+    fontSize: FONTSIZE.size_12,
     color: COLORS.WhiteRGBA75,
   },
   tagline: {
@@ -115,9 +124,11 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   posterContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    position: 'absolute',
+    top: 100,
+    left: 30,
+    flexDirection: 'row',
+    gap: 5,
   },
   playBtnContainer: {
     padding: 10,
@@ -127,5 +138,26 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: COLORS.Orange,
     zIndex: 50,
+  },
+  posterInfoContainer: {
+    marginLeft: -25,
+    width: 200,
+  },
+  listInfoContainer: {
+    flexDirection: 'column',
+    marginTop: -10,
+    marginLeft: SPACING.space_32,
+    gap: SPACING.space_2,
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: SPACING.space_10,
+  },
+  ratingText: {
+    fontFamily: FONTFAMILY.poppins_semibold,
+    fontSize: FONTSIZE.size_14,
+    color: COLORS.White,
+    marginLeft: SPACING.space_8,
   },
 });
