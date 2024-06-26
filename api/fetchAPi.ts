@@ -90,6 +90,6 @@ export const getMovieTrailer = async (id: number) => {
     (video: any) => video.type === 'Trailer' && video.site === 'YouTube',
   );
   return trailers.length > 0
-    ? `https://www.youtube.com/watch?v=${trailers[0].key}`
+    ? trailers[0].key
     : null;
 };
