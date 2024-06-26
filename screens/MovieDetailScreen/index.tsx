@@ -26,11 +26,12 @@ import ActorCastCard from '../../components/ActorCast';
 import {LinearGradient} from 'expo-linear-gradient';
 import StarRating from './_component/StarRating';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import YoutubePlayer from 'react-native-youtube-iframe';
 
 const MovieDetailScreen = ({navigation, route}: any) => {
   const [movieData, setMovieData] = useState<any>(undefined);
   const [movieCastData, setmovieCastData] = useState<any>(undefined);
-  const [trailerUrl, setTrailerUrl] = useState<string | null>(null);
+  const [trailerId, setTrailerId] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [rating, setRating] = useState<number>(0);
 
@@ -48,7 +49,8 @@ const MovieDetailScreen = ({navigation, route}: any) => {
 
     (async () => {
       const trailerUrl = await getMovieTrailer(route.params.movieid);
-      setTrailerUrl(trailerUrl);
+      setTrailerId(trailerUrl);
+      console.log({trailerUrl});
     })();
   }, [route.params.movieid]);
 
@@ -194,7 +196,6 @@ const MovieDetailScreen = ({navigation, route}: any) => {
               color={COLORS.White}
             />
             <Text style={{color: COLORS.WhiteRGBA50, textAlign: 'center'}}>
-
               Menyukai
             </Text>
           </TouchableOpacity>
@@ -219,6 +220,18 @@ const MovieDetailScreen = ({navigation, route}: any) => {
             <Text style={styles.movieActionText}> Berbagi </Text>
           </TouchableOpacity>
         </View>
+
+        <View>
+          {/* Video trailerynya */}
+          {trailerId && (
+            <YoutubePlayer
+              height={300}
+              play={true}
+              videoId={trailerId}
+            />
+          )}
+        </View>
+
         <View style={{marginTop: SPACING.space_8}}>
           <Text style={styles.descriptionText}>{movieData?.overview}</Text>
         </View>
@@ -243,26 +256,6 @@ const MovieDetailScreen = ({navigation, route}: any) => {
             />
           )}
         />
-
-        <View style={styles.playContainer}>
-          <TouchableOpacity
-            style={styles.buttonBG}
-            onPress={() => {
-              navigation.push('SeatBooking', {
-                BgImage: baseImagePath('w780', movieData.backdrop_path),
-                PosterImage: baseImagePath('original', movieData.poster_path),
-              });
-            }}>
-            <Text style={styles.buttonText}>Tonton di Bioskop</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.buttonBG}
-            onPress={() => {
-              setModalVisible(true);
-            }}>
-            <Text style={styles.buttonText}>Tonton di Streaming</Text>
-          </TouchableOpacity>
-        </View>
       </View>
 
       <Modal
@@ -270,7 +263,7 @@ const MovieDetailScreen = ({navigation, route}: any) => {
         animationType="slide"
         onRequestClose={() => setModalVisible(false)}>
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          {trailerUrl ? (
+          {trailerId ? (
             <Text>Playing</Text>
           ) : (
             <Text>Trailer not available</Text>
