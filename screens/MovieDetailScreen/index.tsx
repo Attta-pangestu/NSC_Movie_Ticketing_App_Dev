@@ -34,6 +34,9 @@ const MovieDetailScreen = ({navigation, route}: any) => {
   const [trailerId, setTrailerId] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [rating, setRating] = useState<number>(0);
+  const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
+const [isLiked, setIsLiked] = useState<boolean>(false);
+
 
   useEffect(() => {
     (async () => {
@@ -50,7 +53,6 @@ const MovieDetailScreen = ({navigation, route}: any) => {
     (async () => {
       const trailerUrl = await getMovieTrailer(route.params.movieid);
       setTrailerId(trailerUrl);
-      console.log({trailerUrl});
     })();
   }, [route.params.movieid]);
 
@@ -62,14 +64,41 @@ const MovieDetailScreen = ({navigation, route}: any) => {
         ...movie,
         poster_path: baseImagePath('w342', movie.poster_path),
       };
-
-      bookmarksArray.push(movieData);
+  
+      const index = bookmarksArray.findIndex((item: any) => item.id === movie.id);
+      if (index !== -1) {
+        bookmarksArray.splice(index, 1);
+        setIsBookmarked(false);
+      } else {
+        bookmarksArray.push(movieData);
+        setIsBookmarked(true);
+      }
+  
       await AsyncStorage.setItem('bookmarks', JSON.stringify(bookmarksArray));
-      alert('Movie bookmarked!');
+      alert(`Movie ${isBookmarked ? 'removed from' : 'added to'} bookmarks!`);
     } catch (error) {
       console.error(error);
     }
   };
+  
+  const toggleLike = async (movie: any) => {
+    try {
+      const likes = await AsyncStorage.getItem('likes');
+      const likesArray = likes ? JSON.parse(likes) : [];
+      const index = likesArray.findIndex((item: any) => item.id === movie.id);
+      if (index !== -1) {
+        likesArray.splice(index, 1);
+        setIsLiked(false);
+      } else {
+        likesArray.push(movie);
+        setIsLiked(true);
+      }
+      await AsyncStorage.setItem('likes', JSON.stringify(likesArray));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
 
   if (
     movieData === undefined &&
@@ -181,19 +210,19 @@ const MovieDetailScreen = ({navigation, route}: any) => {
             onPress={() => saveBookmark(movieData)}>
             <IconsSolid.BookmarkIcon
               size={FONTSIZE.size_24}
-              color={COLORS.White}
+              color={isBookmarked ? 'yellow' : COLORS.White}
             />
             <Text style={{color: COLORS.WhiteRGBA50, textAlign: 'center'}}>
-              Bookmark
+              Watchlist
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.movieActionItem}
             activeOpacity={0.7}
-            onPress={() => {}}>
+            onPress={() => toggleLike(movieData)}>
             <IconsSolid.HeartIcon
               size={FONTSIZE.size_24}
-              color={COLORS.White}
+              color={isLiked ? 'red' : COLORS.White}
             />
             <Text style={{color: COLORS.WhiteRGBA50, textAlign: 'center'}}>
               Menyukai
@@ -207,7 +236,7 @@ const MovieDetailScreen = ({navigation, route}: any) => {
               size={FONTSIZE.size_24}
               color={COLORS.White}
             />
-            <Text style={styles.movieActionText}> Komentari </Text>
+            <Text style={styles.movieActionText }> Komentari </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.movieActionItem}
@@ -222,7 +251,6 @@ const MovieDetailScreen = ({navigation, route}: any) => {
         </View>
 
         <View>
-          {/* Video trailerynya */}
           {trailerId && (
             <YoutubePlayer
               height={300}
