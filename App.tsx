@@ -7,6 +7,7 @@ import {useFonts} from 'expo-font';
 import {ActivityIndicator} from 'react-native';
 import {COLORS} from './theme/theme';
 import MovieDetailScreen from './screens/MovieDetailScreen';
+import SplashScreen from './screens/SplashScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="SplashScreen" component={SplashScreen} />
         <Stack.Screen
           name="Tab"
           component={TabNavigator}

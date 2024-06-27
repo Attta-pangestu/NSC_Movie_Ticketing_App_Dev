@@ -301,9 +301,9 @@ const MovieDetailScreen = ({navigation, route}: any) => {
           <Text style={styles.descriptionTitle}>Reviews</Text>
           <FlatList
             data={reviews}
-            keyExtractor={(item : any) => item.id.toString()}
+            keyExtractor={(item: any) => item.id.toString()}
             horizontal
-            renderItem={({item: review } : any) => (
+            renderItem={({item: review}: any) => (
               <View key={review.id} style={styles.reviewContainer}>
                 <View style={styles.reviewHeader}>
                   <Image
@@ -337,7 +337,7 @@ const MovieDetailScreen = ({navigation, route}: any) => {
           />
         </View>
       </View>
-      <CategoryHeader title="Top Cast" />
+      <CategoryHeader title="Pemain Film" />
       <FlatList
         data={movieCastData}
         keyExtractor={(item: any) => item.id}

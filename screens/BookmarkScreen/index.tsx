@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Text, View, FlatList, Image, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { styles } from './style';
+import {styles} from './style';
 
 interface Genre {
   id: number;
@@ -20,7 +20,7 @@ interface BookmarkScreenProps {
   navigation: any;
 }
 
-const BookmarkScreen: React.FC<BookmarkScreenProps> = ({ navigation }) => {
+const BookmarkScreen: React.FC<BookmarkScreenProps> = ({navigation}) => {
   const [bookmarks, setBookmarks] = useState<Movie[]>([]);
 
   useEffect(() => {
@@ -48,7 +48,9 @@ const BookmarkScreen: React.FC<BookmarkScreenProps> = ({ navigation }) => {
 
   const removeBookmark = async (movieId: number) => {
     try {
-      const updatedBookmarks = bookmarks.filter((bookmark) => bookmark.id !== movieId);
+      const updatedBookmarks = bookmarks.filter(
+        (bookmark) => bookmark.id !== movieId,
+      );
       setBookmarks(updatedBookmarks);
       await AsyncStorage.setItem('bookmarks', JSON.stringify(updatedBookmarks));
     } catch (error) {
@@ -62,20 +64,29 @@ const BookmarkScreen: React.FC<BookmarkScreenProps> = ({ navigation }) => {
       <FlatList
         data={bookmarks}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.bookmarkItem} key={item.id}>
-            <Image source={{ uri: item.poster_path }} style={styles.posterImage} />
-            <View style={styles.bookmarkDetails}>
-              <Text style={styles.movieTitle}>{item.original_title}</Text>
-              <Text style={styles.movieDuration}>Duration: {Math.floor(item.runtime / 60)}h {item.runtime % 60}m</Text>
-              <Text style={styles.movieGenres}>
-                Genres: {item.genres.map((genre) => genre.name).join(', ')}
-              </Text>
-              <TouchableOpacity onPress={() => removeBookmark(item.id)}>
-                <Text style={styles.removeText}>Remove</Text>
-              </TouchableOpacity>
+        renderItem={({item}) => (
+          <TouchableOpacity
+            onPress={() => navigation.push('MovieDetails', {movieid: item.id})}>
+            <View style={styles.bookmarkItem} key={item.id}>
+              <Image
+                source={{uri: item.poster_path}}
+                style={styles.posterImage}
+              />
+              <View style={styles.bookmarkDetails}>
+                <Text style={styles.movieTitle}>{item.original_title}</Text>
+                <Text style={styles.movieDuration}>
+                  Duration: {Math.floor(item.runtime / 60)}h {item.runtime % 60}
+                  m
+                </Text>
+                <Text style={styles.movieGenres}>
+                  Genres: {item.genres.map((genre) => genre.name).join(', ')}
+                </Text>
+                <TouchableOpacity onPress={() => removeBookmark(item.id)}>
+                  <Text style={styles.removeText}>Remove</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          </TouchableOpacity>
         )}
       />
     </View>
