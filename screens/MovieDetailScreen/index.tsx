@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
   Modal,
+  Dimensions,
 } from 'react-native';
 import {
   getMovieCastDetails,
@@ -28,6 +29,8 @@ import StarRating from './_component/StarRating';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import YoutubePlayer from 'react-native-youtube-iframe';
 
+const {width, height} = Dimensions.get('screen');
+
 const MovieDetailScreen = ({navigation, route}: any) => {
   const [movieData, setMovieData] = useState<any>(undefined);
   const [movieCastData, setmovieCastData] = useState<any>(undefined);
@@ -43,12 +46,16 @@ const MovieDetailScreen = ({navigation, route}: any) => {
       setMovieData(tempMovieData);
       setRating(tempMovieData.vote_average);
       const bookmarks = await AsyncStorage.getItem('bookmarks');
-    const bookmarksArray = bookmarks ? JSON.parse(bookmarks) : [];
-    setIsBookmarked(bookmarksArray.some((item: any) => item.id === route.params.movieid));
+      const bookmarksArray = bookmarks ? JSON.parse(bookmarks) : [];
+      setIsBookmarked(
+        bookmarksArray.some((item: any) => item.id === route.params.movieid),
+      );
 
-    const likes = await AsyncStorage.getItem('likes');
-    const likesArray = likes ? JSON.parse(likes) : [];
-    setIsLiked(likesArray.some((item: any) => item.id === route.params.movieid));
+      const likes = await AsyncStorage.getItem('likes');
+      const likesArray = likes ? JSON.parse(likes) : [];
+      setIsLiked(
+        likesArray.some((item: any) => item.id === route.params.movieid),
+      );
     })();
 
     (async () => {
@@ -257,19 +264,25 @@ const MovieDetailScreen = ({navigation, route}: any) => {
           </TouchableOpacity>
         </View>
 
-        <View>
+        <View style={{position: 'relative', marginHorizontal: -14}}>
           {trailerId && (
-            <YoutubePlayer height={300} play={true} videoId={trailerId} />
+            <YoutubePlayer
+              height={250}
+              width={width}
+              play={true}
+              videoId={trailerId}
+            />
           )}
         </View>
-
-        <View style={{marginTop: SPACING.space_8}}>
-          <Text style={styles.descriptionText}>{movieData?.overview}</Text>
+        <View style={styles.descriptionContainer}>
+          <Text style={styles.descriptionTitle}>Summary</Text>
+          <View>
+            <Text style={styles.descriptionText}>{movieData?.overview}</Text>
+          </View>
         </View>
-      </View>
 
-      <View>
-        <CategoryHeader title="Top Cast" />
+      </View>
+      <CategoryHeader title="Top Cast" />
         <FlatList
           data={movieCastData}
           keyExtractor={(item: any) => item.id}
@@ -287,7 +300,6 @@ const MovieDetailScreen = ({navigation, route}: any) => {
             />
           )}
         />
-      </View>
 
       <Modal
         visible={modalVisible}

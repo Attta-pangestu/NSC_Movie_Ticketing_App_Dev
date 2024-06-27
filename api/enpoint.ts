@@ -29,3 +29,7 @@ export const genreIds = {
 export const movieTrailer = (id: number) => {
   return `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${apikey}`;
 };
+
+export const movieReviews = (id: number) => {
+  return `https://api.themoviedb.org/3/movie/${id}/reviews?api_key=${apikey}`;
+};

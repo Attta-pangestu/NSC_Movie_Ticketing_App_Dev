@@ -108,6 +108,7 @@ export const styles = StyleSheet.create({
   },
   containerGap24: {
     gap: SPACING.space_24,
+    
   },
   buttonBG: {
     alignItems: 'center',
@@ -216,4 +217,14 @@ export const styles = StyleSheet.create({
     color: COLORS.WhiteRGBA50,
     textAlign: 'center',
   },
+  descriptionTitle : {
+    fontSize: FONTSIZE.size_24,
+    color: COLORS.White,
+    fontFamily: FONTFAMILY.poppins_semibold,
+    textAlign: 'justify',
+    paddingTop: SPACING.space_8
+  }, 
+  descriptionContainer: {
+    // marginTop: -SPACING.space_36
+  }
 });

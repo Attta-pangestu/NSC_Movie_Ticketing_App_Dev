@@ -6,6 +6,7 @@ import {
   upcomingMovies,
   moviesByCategory,
   movieTrailer,
+  movieReviews,
 } from './enpoint';
 
 export const getNowPlayingMoviesList = async () => {
@@ -92,4 +93,14 @@ export const getMovieTrailer = async (id: number) => {
   return trailers.length > 0
     ? trailers[0].key
     : null;
+};
+
+export const getMovieReviews = async (movieid: number) => {
+  try {
+    let response = await fetch(movieReviews(movieid));
+    let json = await response.json();
+    return json;
+  } catch (error) {
+    console.error('Something Went wrong in getMovieReviews Function', error);
+  }
 };

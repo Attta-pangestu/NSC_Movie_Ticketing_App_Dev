@@ -59,7 +59,7 @@ const FavoritesScreen: React.FC<FavoritesScreenProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Favorites</Text>
+      <Text style={styles.header}>Movie Disukai</Text>
       <FlatList
         data={favorites}
         keyExtractor={(item) => item.id.toString()}

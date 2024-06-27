@@ -178,192 +178,194 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
         ))}
       </ScrollView>
 
-      {/* for all selected category */}
-      {selectedCategory === 'All' && (
-        <View>
-          <CategoryHeader title={'Now Playing Di Bioskop'} />
+      <View>
+        {/* for all selected category */}
+        {selectedCategory === 'All' && (
+          <View>
+            <CategoryHeader title={'Now Playing Di Bioskop'} />
+            <FlatList
+              data={nowPlayingMoviesList}
+              keyExtractor={(item) => item.id.toString()}
+              bounces={false}
+              snapToInterval={width * 0.7 + SPACING.space_36}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              decelerationRate={0}
+              contentContainerStyle={styles.containerGap36}
+              renderItem={({item, index}) => (
+                <MovieCard
+                  shouldMarginatedAround={true}
+                  cardFunction={() => {
+                    navigation.push('MovieDetails', {movieid: item.id});
+                  }}
+                  cardWidth={width * 0.7}
+                  isFirst={index === 0}
+                  isLast={index === nowPlayingMoviesList.length - 1}
+                  title={item.original_title}
+                  imagePath={baseImagePath('w780', item.poster_path)}
+                  genre={item.genre_ids.slice(1, 4)}
+                  vote_average={item.vote_average}
+                  vote_count={item.vote_count}
+                />
+              )}
+            />
+            <CategoryHeader title={'Popular'} />
+            <FlatList
+              data={popularMoviesList}
+              keyExtractor={(item) => item.id.toString()}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              bounces={false}
+              contentContainerStyle={styles.containerGap36}
+              renderItem={({item, index}) => (
+                <SubMovieCard
+                  shouldMarginatedAtEnd={true}
+                  cardFunction={() => {
+                    navigation.push('MovieDetails', {movieid: item.id});
+                  }}
+                  cardWidth={width / 3}
+                  isFirst={index === 0}
+                  isLast={index === popularMoviesList.length - 1}
+                  title={item.original_title}
+                  imagePath={baseImagePath('w342', item.poster_path)}
+                />
+              )}
+            />
+            <CategoryHeader title={'Upcoming'} />
+            <FlatList
+              data={upcomingMoviesList}
+              keyExtractor={(item) => item.id.toString()}
+              horizontal
+              bounces={false}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.containerGap36}
+              renderItem={({item, index}) => (
+                <SubMovieCard
+                  shouldMarginatedAtEnd={true}
+                  cardFunction={() => {
+                    navigation.push('MovieDetails', {movieid: item.id});
+                  }}
+                  cardWidth={width / 3}
+                  isFirst={index === 0}
+                  isLast={index === upcomingMoviesList.length - 1}
+                  title={item.original_title}
+                  imagePath={baseImagePath('w342', item.poster_path)}
+                />
+              )}
+            />
+            <CategoryHeader title={'Action Movies'} />
+            <FlatList
+              data={actionMoviesList}
+              keyExtractor={(item) => item.id.toString()}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              bounces={false}
+              contentContainerStyle={styles.containerGap36}
+              renderItem={({item, index}) => (
+                <SubMovieCard
+                  shouldMarginatedAtEnd={true}
+                  cardFunction={() => {
+                    navigation.push('MovieDetails', {movieid: item.id});
+                  }}
+                  cardWidth={width / 3}
+                  isFirst={index === 0}
+                  isLast={index === actionMoviesList.length - 1}
+                  title={item.original_title}
+                  imagePath={baseImagePath('w342', item.poster_path)}
+                />
+              )}
+            />
+            <CategoryHeader title={'Comedy Movies'} />
+            <FlatList
+              data={comedyMoviesList}
+              keyExtractor={(item) => item.id.toString()}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              bounces={false}
+              contentContainerStyle={styles.containerGap36}
+              renderItem={({item, index}) => (
+                <SubMovieCard
+                  shouldMarginatedAtEnd={true}
+                  cardFunction={() => {
+                    navigation.push('MovieDetails', {movieid: item.id});
+                  }}
+                  cardWidth={width / 3}
+                  isFirst={index === 0}
+                  isLast={index === comedyMoviesList.length - 1}
+                  title={item.original_title}
+                  imagePath={baseImagePath('w342', item.poster_path)}
+                />
+              )}
+            />
+            <CategoryHeader title={'Drama Movies'} />
+            <FlatList
+              data={dramaMoviesList}
+              keyExtractor={(item) => item.id.toString()}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              bounces={false}
+              contentContainerStyle={styles.containerGap36}
+              renderItem={({item, index}) => (
+                <SubMovieCard
+                  shouldMarginatedAtEnd={true}
+                  cardFunction={() => {
+                    navigation.push('MovieDetails', {movieid: item.id});
+                  }}
+                  cardWidth={width / 3}
+                  isFirst={index === 0}
+                  isLast={index === dramaMoviesList.length - 1}
+                  title={item.original_title}
+                  imagePath={baseImagePath('w342', item.poster_path)}
+                />
+              )}
+            />
+            <CategoryHeader title={'Horror Movies'} />
+            <FlatList
+              data={horrorMoviesList}
+              keyExtractor={(item) => item.id.toString()}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              bounces={false}
+              contentContainerStyle={styles.containerGap36}
+              renderItem={({item, index}) => (
+                <SubMovieCard
+                  shouldMarginatedAtEnd={true}
+                  cardFunction={() => {
+                    navigation.push('MovieDetails', {movieid: item.id});
+                  }}
+                  cardWidth={width / 3}
+                  isFirst={index === 0}
+                  isLast={index === horrorMoviesList.length - 1}
+                  title={item.original_title}
+                  imagePath={baseImagePath('w342', item.poster_path)}
+                />
+              )}
+            />
+          </View>
+        )}
+
+        {selectedCategory !== 'All' && (
           <FlatList
-            data={nowPlayingMoviesList}
+            data={getCategoryData()}
             keyExtractor={(item) => item.id.toString()}
-            bounces={false}
-            snapToInterval={width * 0.7 + SPACING.space_36}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            decelerationRate={0}
-            contentContainerStyle={styles.containerGap36}
-            renderItem={({item, index}) => (
-              <MovieCard
+            numColumns={3}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.categoryContentContainer}
+            renderItem={({item}) => (
+              <SubMovieCard
+                shouldMarginatedAtEnd={false}
                 shouldMarginatedAround={true}
                 cardFunction={() => {
                   navigation.push('MovieDetails', {movieid: item.id});
                 }}
-                cardWidth={width * 0.7}
-                isFirst={index === 0}
-                isLast={index === nowPlayingMoviesList.length - 1}
-                title={item.original_title}
-                imagePath={baseImagePath('w780', item.poster_path)}
-                genre={item.genre_ids.slice(1, 4)}
-                vote_average={item.vote_average}
-                vote_count={item.vote_count}
-              />
-            )}
-          />
-          <CategoryHeader title={'Popular'} />
-          <FlatList
-            data={popularMoviesList}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            bounces={false}
-            contentContainerStyle={styles.containerGap36}
-            renderItem={({item, index}) => (
-              <SubMovieCard
-                shouldMarginatedAtEnd={true}
-                cardFunction={() => {
-                  navigation.push('MovieDetails', {movieid: item.id});
-                }}
-                cardWidth={width / 3}
-                isFirst={index === 0}
-                isLast={index === popularMoviesList.length - 1}
+                cardWidth={width / 3 - SPACING.space_8 * 3}
                 title={item.original_title}
                 imagePath={baseImagePath('w342', item.poster_path)}
               />
             )}
           />
-          <CategoryHeader title={'Upcoming'} />
-          <FlatList
-            data={upcomingMoviesList}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal
-            bounces={false}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.containerGap36}
-            renderItem={({item, index}) => (
-              <SubMovieCard
-                shouldMarginatedAtEnd={true}
-                cardFunction={() => {
-                  navigation.push('MovieDetails', {movieid: item.id});
-                }}
-                cardWidth={width / 3}
-                isFirst={index === 0}
-                isLast={index === upcomingMoviesList.length - 1}
-                title={item.original_title}
-                imagePath={baseImagePath('w342', item.poster_path)}
-              />
-            )}
-          />
-          <CategoryHeader title={'Action Movies'} />
-          <FlatList
-            data={actionMoviesList}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            bounces={false}
-            contentContainerStyle={styles.containerGap36}
-            renderItem={({item, index}) => (
-              <SubMovieCard
-                shouldMarginatedAtEnd={true}
-                cardFunction={() => {
-                  navigation.push('MovieDetails', {movieid: item.id});
-                }}
-                cardWidth={width / 3}
-                isFirst={index === 0}
-                isLast={index === actionMoviesList.length - 1}
-                title={item.original_title}
-                imagePath={baseImagePath('w342', item.poster_path)}
-              />
-            )}
-          />
-          <CategoryHeader title={'Comedy Movies'} />
-          <FlatList
-            data={comedyMoviesList}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            bounces={false}
-            contentContainerStyle={styles.containerGap36}
-            renderItem={({item, index}) => (
-              <SubMovieCard
-                shouldMarginatedAtEnd={true}
-                cardFunction={() => {
-                  navigation.push('MovieDetails', {movieid: item.id});
-                }}
-                cardWidth={width / 3}
-                isFirst={index === 0}
-                isLast={index === comedyMoviesList.length - 1}
-                title={item.original_title}
-                imagePath={baseImagePath('w342', item.poster_path)}
-              />
-            )}
-          />
-          <CategoryHeader title={'Drama Movies'} />
-          <FlatList
-            data={dramaMoviesList}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            bounces={false}
-            contentContainerStyle={styles.containerGap36}
-            renderItem={({item, index}) => (
-              <SubMovieCard
-                shouldMarginatedAtEnd={true}
-                cardFunction={() => {
-                  navigation.push('MovieDetails', {movieid: item.id});
-                }}
-                cardWidth={width / 3}
-                isFirst={index === 0}
-                isLast={index === dramaMoviesList.length - 1}
-                title={item.original_title}
-                imagePath={baseImagePath('w342', item.poster_path)}
-              />
-            )}
-          />
-          <CategoryHeader title={'Horror Movies'} />
-          <FlatList
-            data={horrorMoviesList}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            bounces={false}
-            contentContainerStyle={styles.containerGap36}
-            renderItem={({item, index}) => (
-              <SubMovieCard
-                shouldMarginatedAtEnd={true}
-                cardFunction={() => {
-                  navigation.push('MovieDetails', {movieid: item.id});
-                }}
-                cardWidth={width / 3}
-                isFirst={index === 0}
-                isLast={index === horrorMoviesList.length - 1}
-                title={item.original_title}
-                imagePath={baseImagePath('w342', item.poster_path)}
-              />
-            )}
-          />
-        </View>
-      )}
-
-      {selectedCategory !== 'All' && (
-        <FlatList
-          data={getCategoryData()}
-          keyExtractor={(item) => item.id.toString()}
-          numColumns={3}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.categoryContentContainer}
-          renderItem={({item}) => (
-            <SubMovieCard
-              shouldMarginatedAtEnd={false}
-              shouldMarginatedAround={true}
-              cardFunction={() => {
-                navigation.push('MovieDetails', {movieid: item.id});
-              }}
-              cardWidth={width / 3 - SPACING.space_8 * 3}
-              title={item.original_title}
-              imagePath={baseImagePath('w342', item.poster_path)}
-            />
-          )}
-        />
-      )}
+        )}
+      </View>
     </ScrollView>
   );
 };
