@@ -103,7 +103,7 @@ const TicketScreen = ({navigation, route}: any) => {
           <View style={styles.ticketSeatContainer}>
             <View style={styles.subtitleContainer}>
               <Text style={styles.subheading}>Lokasi</Text>
-              <Text style={styles.subtitle}>Bioskop XX1</Text>
+              <Text style={styles.subtitle}>Bioskop NSC</Text>
             </View>
             <View style={styles.subtitleContainer}>
               <Text style={styles.subheading}>Baris</Text>

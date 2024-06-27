@@ -185,7 +185,16 @@ const MovieDetailScreen = ({navigation, route}: any) => {
             </View>
             <Text style={styles.tagline}>"{movieData?.tagline}"</Text>
             <View style={styles.posterBtnContainer}>
-              <TouchableOpacity style={styles.posterBtnAction}>
+              <TouchableOpacity style={styles.posterBtnAction}
+                onPress={
+                  () => {
+                    navigation.push('SeatBooking', {
+                      BgImage: baseImagePath('w780', movieData.backdrop_path),
+                      PosterImage: baseImagePath('original', movieData.poster_path),
+                    });
+                  }
+                }
+              >
                 <Text style={styles.btnPlayingText}>Tonton di Bioskop</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.posterBtnAction}>
@@ -301,9 +310,9 @@ const MovieDetailScreen = ({navigation, route}: any) => {
           <Text style={styles.descriptionTitle}>Reviews</Text>
           <FlatList
             data={reviews}
-            keyExtractor={(item : any) => item.id.toString()}
+            keyExtractor={(item: any) => item.id.toString()}
             horizontal
-            renderItem={({item: review } : any) => (
+            renderItem={({item: review}: any) => (
               <View key={review.id} style={styles.reviewContainer}>
                 <View style={styles.reviewHeader}>
                   <Image
@@ -337,7 +346,7 @@ const MovieDetailScreen = ({navigation, route}: any) => {
           />
         </View>
       </View>
-      <CategoryHeader title="Top Cast" />
+      <CategoryHeader title="Pemain Film" />
       <FlatList
         data={movieCastData}
         keyExtractor={(item: any) => item.id}

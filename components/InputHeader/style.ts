@@ -49,7 +49,7 @@ export const styles = StyleSheet.create({
     top: 11,
     zIndex: 50,
     flexDirection: 'row',
-    gap: SPACING.space_16,
+    gap: SPACING.space_8,
     alignItems: 'center',
     justifyContent: 'space-between',
     marginHorizontal: SPACING.space_18,

@@ -85,8 +85,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   });
   const viewConfigRef = useRef({viewAreaCoveragePercentThreshold: 50});
 
-  const searchHandler = () => {
-    navigation.navigate('Search');
+  const searchHandler = (query : any) => {
+    navigation.navigate('Search', {query});
   };
 
   const getCategoryData = () => {
@@ -115,7 +115,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
         bounces={false}
         contentContainerStyle={styles.scrollViewContainer}>
         <StatusBar hidden />
-        <InputHeader searchHandler={searchHandler} />
+        <InputHeader searchHandler={(query) => searchHandler(query) } />
         <View style={styles.loadingContainer}>
           <ActivityIndicator size={'large'} color={'orange'} />
         </View>

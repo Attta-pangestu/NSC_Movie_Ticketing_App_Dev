@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   View,
@@ -13,10 +13,17 @@ import InputHeader from '../../components/InputHeader';
 import SubMovieCard from '../../components/SubMovieCard';
 import {SPACING} from '../../theme/theme';
 
-const {width, height} = Dimensions.get('screen');
+const {width} = Dimensions.get('screen');
 
-const SearchScreen = ({navigation}: any) => {
+const SearchScreen = ({navigation, route}: any) => {
   const [searchList, setSearchList] = useState([]);
+  const {query} = route.params || {};
+
+  useEffect(() => {
+    if (query) {
+      searchHandler(query);
+    }
+  }, [query]);
 
   const searchHandler = async (name: string) => {
     try {
@@ -36,7 +43,7 @@ const SearchScreen = ({navigation}: any) => {
         <InputHeader searchHandler={searchHandler} />
         <FlatList
           data={searchList}
-          keyExtractor={(item: any) => item.id}
+          keyExtractor={(item: any) => item.id.toString()}
           bounces={false}
           numColumns={2}
           showsVerticalScrollIndicator={false}
