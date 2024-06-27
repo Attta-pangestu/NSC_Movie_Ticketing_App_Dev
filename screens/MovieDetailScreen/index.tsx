@@ -185,7 +185,16 @@ const MovieDetailScreen = ({navigation, route}: any) => {
             </View>
             <Text style={styles.tagline}>"{movieData?.tagline}"</Text>
             <View style={styles.posterBtnContainer}>
-              <TouchableOpacity style={styles.posterBtnAction}>
+              <TouchableOpacity style={styles.posterBtnAction}
+                onPress={
+                  () => {
+                    navigation.push('SeatBooking', {
+                      BgImage: baseImagePath('w780', movieData.backdrop_path),
+                      PosterImage: baseImagePath('original', movieData.poster_path),
+                    });
+                  }
+                }
+              >
                 <Text style={styles.btnPlayingText}>Tonton di Bioskop</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.posterBtnAction}>

@@ -17,7 +17,7 @@ const {width} = Dimensions.get('screen');
 
 const SearchScreen = ({navigation, route}: any) => {
   const [searchList, setSearchList] = useState([]);
-  const {query} = route.params;
+  const {query} = route.params || {};
 
   useEffect(() => {
     if (query) {

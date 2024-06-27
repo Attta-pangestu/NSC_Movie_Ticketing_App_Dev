@@ -8,6 +8,8 @@ import {ActivityIndicator} from 'react-native';
 import {COLORS} from './theme/theme';
 import MovieDetailScreen from './screens/MovieDetailScreen';
 import SplashScreen from './screens/SplashScreen';
+import UserProfileScreen from './screens/UserProfileScreen'; // Import UserProfileScreen
+import LoginScreen from './screens/LoginScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,7 +33,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="SplashScreen" component={SplashScreen} />
+        <Stack.Screen name="SplashScreen" component={SplashScreen} />
         <Stack.Screen
           name="Tab"
           component={TabNavigator}
@@ -46,6 +48,16 @@ const App = () => {
           name="SeatBooking"
           component={BookingSeatScreen}
           options={{animation: 'slide_from_bottom'}}
+        />
+        <Stack.Screen
+          name="UserProfile"
+          component={UserProfileScreen}
+          options={{animation: 'slide_from_left'}}
+        />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{animation: 'slide_from_left'}}
         />
       </Stack.Navigator>
     </NavigationContainer>

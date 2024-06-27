@@ -1,6 +1,6 @@
-// components/InputHeader.js
+import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, TextInput} from 'react-native';
-import {useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
 import {styles} from './style';
 import * as IconsSolid from 'react-native-heroicons/solid';
 import {COLORS, FONTSIZE} from '../../theme/theme';
@@ -11,6 +11,8 @@ type InputProps = {
 
 const InputHeader = ({searchHandler}: InputProps) => {
   const [searchText, setSearchText] = useState<string>('');
+  const navigation = useNavigation();
+
   return (
     <View style={styles.inputHeaderContainer}>
       <Text style={styles.appName}>NSC</Text>
@@ -32,6 +34,11 @@ const InputHeader = ({searchHandler}: InputProps) => {
           />
         </TouchableOpacity>
       </View>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => navigation.navigate('Login')}>
+        <IconsSolid.UserCircleIcon size={50} color={COLORS.White} />
+      </TouchableOpacity>
     </View>
   );
 };
