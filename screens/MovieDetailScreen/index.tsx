@@ -10,10 +10,12 @@ import {
   TouchableOpacity,
   View,
   Modal,
+  Dimensions,
 } from 'react-native';
 import {
   getMovieCastDetails,
   getMovieDetails,
+  getMovieReviews,
   getMovieTrailer,
 } from '../../api/fetchAPi';
 import {styles} from './style';
@@ -28,6 +30,8 @@ import StarRating from './_component/StarRating';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import YoutubePlayer from 'react-native-youtube-iframe';
 
+const {width} = Dimensions.get('screen');
+
 const MovieDetailScreen = ({navigation, route}: any) => {
   const [movieData, setMovieData] = useState<any>(undefined);
   const [movieCastData, setmovieCastData] = useState<any>(undefined);
@@ -35,14 +39,28 @@ const MovieDetailScreen = ({navigation, route}: any) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [rating, setRating] = useState<number>(0);
   const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
-const [isLiked, setIsLiked] = useState<boolean>(false);
-
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [reviews, setReviews] = useState([]);
+  const [expandedReviews, setExpandedReviews] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   useEffect(() => {
     (async () => {
       const tempMovieData = await getMovieDetails(route.params.movieid);
       setMovieData(tempMovieData);
       setRating(tempMovieData.vote_average);
+      const bookmarks = await AsyncStorage.getItem('bookmarks');
+      const bookmarksArray = bookmarks ? JSON.parse(bookmarks) : [];
+      setIsBookmarked(
+        bookmarksArray.some((item: any) => item.id === route.params.movieid),
+      );
+
+      const likes = await AsyncStorage.getItem('likes');
+      const likesArray = likes ? JSON.parse(likes) : [];
+      setIsLiked(
+        likesArray.some((item: any) => item.id === route.params.movieid),
+      );
     })();
 
     (async () => {
@@ -54,7 +72,12 @@ const [isLiked, setIsLiked] = useState<boolean>(false);
       const trailerUrl = await getMovieTrailer(route.params.movieid);
       setTrailerId(trailerUrl);
     })();
-  }, [route.params.movieid]);
+
+    (async () => {
+      const reviewsData = await getMovieReviews(route.params.movieid);
+      setReviews(reviewsData.results);
+    })();
+  }, [route.params.movieid, isBookmarked, isLiked]);
 
   const saveBookmark = async (movie: any) => {
     try {
@@ -64,8 +87,10 @@ const [isLiked, setIsLiked] = useState<boolean>(false);
         ...movie,
         poster_path: baseImagePath('w342', movie.poster_path),
       };
-  
-      const index = bookmarksArray.findIndex((item: any) => item.id === movie.id);
+
+      const index = bookmarksArray.findIndex(
+        (item: any) => item.id === movie.id,
+      );
       if (index !== -1) {
         bookmarksArray.splice(index, 1);
         setIsBookmarked(false);
@@ -73,14 +98,14 @@ const [isLiked, setIsLiked] = useState<boolean>(false);
         bookmarksArray.push(movieData);
         setIsBookmarked(true);
       }
-  
+
       await AsyncStorage.setItem('bookmarks', JSON.stringify(bookmarksArray));
       alert(`Movie ${isBookmarked ? 'removed from' : 'added to'} bookmarks!`);
     } catch (error) {
       console.error(error);
     }
   };
-  
+
   const toggleLike = async (movie: any) => {
     try {
       const likes = await AsyncStorage.getItem('likes');
@@ -98,7 +123,13 @@ const [isLiked, setIsLiked] = useState<boolean>(false);
       console.error(error);
     }
   };
-  
+
+  const toggleReviewExpansion = (reviewId: string) => {
+    setExpandedReviews((prevState) => ({
+      ...prevState,
+      [reviewId]: !prevState[reviewId],
+    }));
+  };
 
   if (
     movieData === undefined &&
@@ -222,7 +253,7 @@ const [isLiked, setIsLiked] = useState<boolean>(false);
             onPress={() => toggleLike(movieData)}>
             <IconsSolid.HeartIcon
               size={FONTSIZE.size_24}
-              color={isLiked ? 'red' : COLORS.White}
+              color={isLiked ? COLORS.Orange : COLORS.White}
             />
             <Text style={{color: COLORS.WhiteRGBA50, textAlign: 'center'}}>
               Menyukai
@@ -236,7 +267,7 @@ const [isLiked, setIsLiked] = useState<boolean>(false);
               size={FONTSIZE.size_24}
               color={COLORS.White}
             />
-            <Text style={styles.movieActionText }> Komentari </Text>
+            <Text style={styles.movieActionText}> Komentari </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.movieActionItem}
@@ -250,41 +281,80 @@ const [isLiked, setIsLiked] = useState<boolean>(false);
           </TouchableOpacity>
         </View>
 
-        <View>
+        <View style={{position: 'relative', marginHorizontal: -14}}>
           {trailerId && (
             <YoutubePlayer
-              height={300}
+              height={250}
+              width={width}
               play={true}
               videoId={trailerId}
             />
           )}
         </View>
 
-        <View style={{marginTop: SPACING.space_8}}>
-          <Text style={styles.descriptionText}>{movieData?.overview}</Text>
+        <View style={styles.descriptionContainer}>
+          <Text style={styles.descriptionTitle}>Summary</Text>
+          <View>
+            <Text style={styles.descriptionText}>{movieData?.overview}</Text>
+          </View>
+
+          <Text style={styles.descriptionTitle}>Reviews</Text>
+          <FlatList
+            data={reviews}
+            keyExtractor={(item : any) => item.id.toString()}
+            horizontal
+            renderItem={({item: review } : any) => (
+              <View key={review.id} style={styles.reviewContainer}>
+                <View style={styles.reviewHeader}>
+                  <Image
+                    source={{
+                      uri: review.author_details.avatar_path
+                        ? `https://image.tmdb.org/t/p/w45${review.author_details.avatar_path}`
+                        : 'default-avatar.png',
+                    }}
+                    style={styles.reviewAvatar}
+                  />
+                  <Text style={styles.reviewAuthor}>{review.author}</Text>
+                </View>
+                <Text
+                  numberOfLines={expandedReviews[review.id] ? undefined : 6}
+                  ellipsizeMode={expandedReviews[review.id] ? 'clip' : 'tail'}
+                  style={styles.reviewContent}>
+                  {review.content}
+                </Text>
+                {review.content.split('\n').length > 6 && (
+                  <TouchableOpacity
+                    onPress={() => toggleReviewExpansion(review.id)}>
+                    <Text style={{color: COLORS.Orange, marginTop: 5}}>
+                      {expandedReviews[review.id]
+                        ? 'Lihat lebih sedikit'
+                        : 'Lihat Selengkapnya'}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            )}
+          />
         </View>
       </View>
-
-      <View>
-        <CategoryHeader title="Top Cast" />
-        <FlatList
-          data={movieCastData}
-          keyExtractor={(item: any) => item.id}
-          horizontal
-          contentContainerStyle={styles.containerGap24}
-          renderItem={({item, index}) => (
-            <ActorCastCard
-              shouldMarginatedAtEnd={true}
-              cardWidth={80}
-              isFirst={index === 0 ? true : false}
-              isLast={index === movieCastData?.length - 1 ? true : false}
-              imagePath={baseImagePath('w185', item.profile_path)}
-              title={item.original_name}
-              subtitle={item.character}
-            />
-          )}
-        />
-      </View>
+      <CategoryHeader title="Top Cast" />
+      <FlatList
+        data={movieCastData}
+        keyExtractor={(item: any) => item.id}
+        horizontal
+        contentContainerStyle={styles.containerGap24}
+        renderItem={({item, index}) => (
+          <ActorCastCard
+            shouldMarginatedAtEnd={true}
+            cardWidth={80}
+            isFirst={index === 0 ? true : false}
+            isLast={index === movieCastData?.length - 1 ? true : false}
+            imagePath={baseImagePath('w185', item.profile_path)}
+            title={item.original_name}
+            subtitle={item.character}
+          />
+        )}
+      />
 
       <Modal
         visible={modalVisible}

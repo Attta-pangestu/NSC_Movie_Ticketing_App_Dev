@@ -58,7 +58,7 @@ const BookmarkScreen: React.FC<BookmarkScreenProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Bookmarks</Text>
+      <Text style={styles.header}>Watchlist</Text>
       <FlatList
         data={bookmarks}
         keyExtractor={(item) => item.id.toString()}

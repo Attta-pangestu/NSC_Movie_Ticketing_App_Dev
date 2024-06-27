@@ -129,7 +129,9 @@ const TabNavigator = () => {
           },
         }}
       />
-      <Tab.Screen
+      {/* belum butuh */}
+      
+      {/* <Tab.Screen
         name="User"
         component={UserProfileScreen}
         options={{
@@ -149,7 +151,7 @@ const TabNavigator = () => {
             );
           },
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };
