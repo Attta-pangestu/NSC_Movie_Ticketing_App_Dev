@@ -15,6 +15,7 @@ import {
 import {
   getMovieCastDetails,
   getMovieDetails,
+  getMovieReviews,
   getMovieTrailer,
 } from '../../api/fetchAPi';
 import {styles} from './style';
@@ -29,7 +30,7 @@ import StarRating from './_component/StarRating';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import YoutubePlayer from 'react-native-youtube-iframe';
 
-const {width, height} = Dimensions.get('screen');
+const {width} = Dimensions.get('screen');
 
 const MovieDetailScreen = ({navigation, route}: any) => {
   const [movieData, setMovieData] = useState<any>(undefined);
@@ -39,6 +40,10 @@ const MovieDetailScreen = ({navigation, route}: any) => {
   const [rating, setRating] = useState<number>(0);
   const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [reviews, setReviews] = useState([]);
+  const [expandedReviews, setExpandedReviews] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   useEffect(() => {
     (async () => {
@@ -66,6 +71,11 @@ const MovieDetailScreen = ({navigation, route}: any) => {
     (async () => {
       const trailerUrl = await getMovieTrailer(route.params.movieid);
       setTrailerId(trailerUrl);
+    })();
+
+    (async () => {
+      const reviewsData = await getMovieReviews(route.params.movieid);
+      setReviews(reviewsData.results);
     })();
   }, [route.params.movieid, isBookmarked, isLiked]);
 
@@ -112,6 +122,13 @@ const MovieDetailScreen = ({navigation, route}: any) => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const toggleReviewExpansion = (reviewId: string) => {
+    setExpandedReviews((prevState) => ({
+      ...prevState,
+      [reviewId]: !prevState[reviewId],
+    }));
   };
 
   if (
@@ -274,32 +291,70 @@ const MovieDetailScreen = ({navigation, route}: any) => {
             />
           )}
         </View>
+
         <View style={styles.descriptionContainer}>
           <Text style={styles.descriptionTitle}>Summary</Text>
           <View>
             <Text style={styles.descriptionText}>{movieData?.overview}</Text>
           </View>
-        </View>
 
+          <Text style={styles.descriptionTitle}>Reviews</Text>
+          <FlatList
+            data={reviews}
+            keyExtractor={(item : any) => item.id.toString()}
+            horizontal
+            renderItem={({item: review } : any) => (
+              <View key={review.id} style={styles.reviewContainer}>
+                <View style={styles.reviewHeader}>
+                  <Image
+                    source={{
+                      uri: review.author_details.avatar_path
+                        ? `https://image.tmdb.org/t/p/w45${review.author_details.avatar_path}`
+                        : 'default-avatar.png',
+                    }}
+                    style={styles.reviewAvatar}
+                  />
+                  <Text style={styles.reviewAuthor}>{review.author}</Text>
+                </View>
+                <Text
+                  numberOfLines={expandedReviews[review.id] ? undefined : 6}
+                  ellipsizeMode={expandedReviews[review.id] ? 'clip' : 'tail'}
+                  style={styles.reviewContent}>
+                  {review.content}
+                </Text>
+                {review.content.split('\n').length > 6 && (
+                  <TouchableOpacity
+                    onPress={() => toggleReviewExpansion(review.id)}>
+                    <Text style={{color: COLORS.Orange, marginTop: 5}}>
+                      {expandedReviews[review.id]
+                        ? 'Lihat lebih sedikit'
+                        : 'Lihat Selengkapnya'}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            )}
+          />
+        </View>
       </View>
       <CategoryHeader title="Top Cast" />
-        <FlatList
-          data={movieCastData}
-          keyExtractor={(item: any) => item.id}
-          horizontal
-          contentContainerStyle={styles.containerGap24}
-          renderItem={({item, index}) => (
-            <ActorCastCard
-              shouldMarginatedAtEnd={true}
-              cardWidth={80}
-              isFirst={index === 0 ? true : false}
-              isLast={index === movieCastData?.length - 1 ? true : false}
-              imagePath={baseImagePath('w185', item.profile_path)}
-              title={item.original_name}
-              subtitle={item.character}
-            />
-          )}
-        />
+      <FlatList
+        data={movieCastData}
+        keyExtractor={(item: any) => item.id}
+        horizontal
+        contentContainerStyle={styles.containerGap24}
+        renderItem={({item, index}) => (
+          <ActorCastCard
+            shouldMarginatedAtEnd={true}
+            cardWidth={80}
+            isFirst={index === 0 ? true : false}
+            isLast={index === movieCastData?.length - 1 ? true : false}
+            imagePath={baseImagePath('w185', item.profile_path)}
+            title={item.original_name}
+            subtitle={item.character}
+          />
+        )}
+      />
 
       <Modal
         visible={modalVisible}

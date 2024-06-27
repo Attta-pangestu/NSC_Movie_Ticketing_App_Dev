@@ -6,6 +6,9 @@ import {
   FONTSIZE,
   SPACING,
 } from '../../theme/theme';
+import {Dimensions} from 'react-native';
+
+const {width} = Dimensions.get('screen');
 
 export const styles = StyleSheet.create({
   container: {
@@ -108,7 +111,6 @@ export const styles = StyleSheet.create({
   },
   containerGap24: {
     gap: SPACING.space_24,
-    
   },
   buttonBG: {
     alignItems: 'center',
@@ -217,14 +219,45 @@ export const styles = StyleSheet.create({
     color: COLORS.WhiteRGBA50,
     textAlign: 'center',
   },
-  descriptionTitle : {
+  descriptionTitle: {
     fontSize: FONTSIZE.size_24,
     color: COLORS.White,
     fontFamily: FONTFAMILY.poppins_semibold,
     textAlign: 'justify',
-    paddingTop: SPACING.space_8
-  }, 
+    paddingTop: SPACING.space_8,
+  },
   descriptionContainer: {
     // marginTop: -SPACING.space_36
-  }
+  },
+  reviewContainer: {
+    width: width * 0.8, // Atur lebar ulasan agar sesuai dengan layar
+    borderColor: COLORS.WhiteRGBA50,
+    borderWidth: 1,
+    padding: SPACING.space_16,
+    marginVertical: SPACING.space_8,
+    marginHorizontal: SPACING.space_4,
+    borderRadius: BORDERRADIUS.radius_10,
+    backgroundColor: COLORS.BlackRGB50,
+  },
+  reviewHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: SPACING.space_8,
+  },
+  reviewAvatar: {
+    width: 45,
+    height: 45,
+    borderRadius: BORDERRADIUS.radius_50,
+    marginRight: SPACING.space_16,
+  },
+  reviewAuthor: {
+    fontFamily: FONTFAMILY.poppins_medium,
+    fontSize: FONTSIZE.size_14,
+    color: COLORS.White,
+  },
+  reviewContent: {
+    fontFamily: FONTFAMILY.poppins_regular,
+    fontSize: FONTSIZE.size_12,
+    color: COLORS.WhiteRGBA75,
+  },
 });
