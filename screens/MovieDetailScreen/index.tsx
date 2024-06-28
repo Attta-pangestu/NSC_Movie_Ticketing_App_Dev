@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -18,21 +18,22 @@ import {
   getMovieReviews,
   getMovieTrailer,
 } from '../../api/fetchAPi';
-import {styles} from './style';
+import { styles } from './style';
 import AppHeader from '../../components/AppHeader';
 import * as IconsSolid from 'react-native-heroicons/solid';
-import {COLORS, FONTSIZE, SPACING} from '../../theme/theme';
-import {baseImagePath} from '../../api/enpoint';
+import { COLORS, FONTSIZE, SPACING } from '../../theme/theme';
+import { baseImagePath } from '../../api/enpoint';
 import CategoryHeader from '../../components/CategoryHeader/Index';
 import ActorCastCard from '../../components/ActorCast';
-import {LinearGradient} from 'expo-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient';
 import StarRating from './_component/StarRating';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import YoutubePlayer from 'react-native-youtube-iframe';
+import { auth, db } from '../../api/firebase';
 
-const {width} = Dimensions.get('screen');
+const { width } = Dimensions.get('screen');
 
-const MovieDetailScreen = ({navigation, route}: any) => {
+const MovieDetailScreen = ({ navigation, route }: any) => {
   const [movieData, setMovieData] = useState<any>(undefined);
   const [movieCastData, setmovieCastData] = useState<any>(undefined);
   const [trailerId, setTrailerId] = useState<string | null>(null);
@@ -50,17 +51,17 @@ const MovieDetailScreen = ({navigation, route}: any) => {
       const tempMovieData = await getMovieDetails(route.params.movieid);
       setMovieData(tempMovieData);
       setRating(tempMovieData.vote_average);
-      const bookmarks = await AsyncStorage.getItem('bookmarks');
-      const bookmarksArray = bookmarks ? JSON.parse(bookmarks) : [];
-      setIsBookmarked(
-        bookmarksArray.some((item: any) => item.id === route.params.movieid),
-      );
 
-      const likes = await AsyncStorage.getItem('likes');
-      const likesArray = likes ? JSON.parse(likes) : [];
-      setIsLiked(
-        likesArray.some((item: any) => item.id === route.params.movieid),
-      );
+      const userId = auth.currentUser?.uid;
+      if (userId) {
+        const userBookmarksRef = db.collection('users').doc(userId).collection('bookmarks').doc(route.params.movieid.toString());
+        const userBookmarksDoc = await userBookmarksRef.get();
+        setIsBookmarked(userBookmarksDoc.exists);
+
+        const userLikesRef = db.collection('users').doc(userId).collection('likes').doc(route.params.movieid.toString());
+        const userLikesDoc = await userLikesRef.get();
+        setIsLiked(userLikesDoc.exists);
+      }
     })();
 
     (async () => {
@@ -79,50 +80,57 @@ const MovieDetailScreen = ({navigation, route}: any) => {
     })();
   }, [route.params.movieid, isBookmarked, isLiked]);
 
-  const saveBookmark = async (movie: any) => {
+  const saveBookmark = async () => {
     try {
-      const bookmarks = await AsyncStorage.getItem('bookmarks');
-      const bookmarksArray = bookmarks ? JSON.parse(bookmarks) : [];
-      const movieData = {
-        ...movie,
-        poster_path: baseImagePath('w342', movie.poster_path),
-      };
-
-      const index = bookmarksArray.findIndex(
-        (item: any) => item.id === movie.id,
-      );
-      if (index !== -1) {
-        bookmarksArray.splice(index, 1);
+      const userId = auth.currentUser?.uid;
+      if (!userId) {
+        throw new Error('User not authenticated');
+      }
+      const userBookmarksRef = db.collection('users').doc(userId).collection('bookmarks').doc(route.params.movieid.toString());
+      const userBookmarksDoc = await userBookmarksRef.get();
+      const isBookmarked = userBookmarksDoc.exists;
+      if (isBookmarked) {
+        await userBookmarksRef.delete();
         setIsBookmarked(false);
       } else {
-        bookmarksArray.push(movieData);
+        const movieDataWithPosterPath = {
+          ...movieData,
+          poster_path: baseImagePath('w342', movieData.poster_path),
+        };
+        await userBookmarksRef.set(movieDataWithPosterPath);
         setIsBookmarked(true);
       }
-
-      await AsyncStorage.setItem('bookmarks', JSON.stringify(bookmarksArray));
-      alert(`Movie ${isBookmarked ? 'removed from' : 'added to'} bookmarks!`);
     } catch (error) {
-      console.error(error);
+      console.error('Error saving bookmark:', error);
     }
   };
 
-  const toggleLike = async (movie: any) => {
+  const toggleLike = async () => {
     try {
-      const likes = await AsyncStorage.getItem('likes');
-      const likesArray = likes ? JSON.parse(likes) : [];
-      const index = likesArray.findIndex((item: any) => item.id === movie.id);
-      if (index !== -1) {
-        likesArray.splice(index, 1);
+      const userId = auth.currentUser?.uid;
+      if (!userId) {
+        throw new Error('User not authenticated');
+      }
+      const userLikesRef = db.collection('users').doc(userId).collection('likes').doc(route.params.movieid.toString());
+      const userLikesDoc = await userLikesRef.get();
+      const isLiked = userLikesDoc.exists;
+      if (isLiked) {
+        await userLikesRef.delete();
         setIsLiked(false);
       } else {
-        likesArray.push(movie);
+        const movieDataWithPosterPath = {
+          ...movieData,
+          poster_path: baseImagePath('w342', movieData.poster_path),
+        };
+        await userLikesRef.set(movieDataWithPosterPath);
         setIsLiked(true);
       }
-      await AsyncStorage.setItem('likes', JSON.stringify(likesArray));
     } catch (error) {
-      console.error(error);
+      console.error('Error toggling like:', error);
+      alert('Error',);
     }
   };
+
 
   const toggleReviewExpansion = (reviewId: string) => {
     setExpandedReviews((prevState) => ({
@@ -174,9 +182,9 @@ const MovieDetailScreen = ({navigation, route}: any) => {
           </LinearGradient>
         </ImageBackground>
         <View style={styles.posterContainer}>
-          <View style={{position: 'relative'}}>
+          <View style={{ position: 'relative' }}>
             <Image
-              source={{uri: baseImagePath('w342', movieData?.poster_path)}}
+              source={{ uri: baseImagePath('w342', movieData?.poster_path) }}
               style={styles.cardImage}
             />
             <View style={styles.ratingContainer}>
@@ -207,7 +215,7 @@ const MovieDetailScreen = ({navigation, route}: any) => {
             <View style={styles.listInfoPosterContainer}>
               <View style={styles.posterInfoItemContainer}>
                 <IconsSolid.CalendarIcon
-                  style={{marginRight: SPACING.space_8}}
+                  style={{ marginRight: SPACING.space_8 }}
                   size={FONTSIZE.size_20}
                   color={COLORS.WhiteRGBA50}
                 />
@@ -217,7 +225,7 @@ const MovieDetailScreen = ({navigation, route}: any) => {
               </View>
               <View style={styles.posterInfoItemContainer}>
                 <IconsSolid.ClockIcon
-                  style={{marginRight: SPACING.space_8}}
+                  style={{ marginRight: SPACING.space_8 }}
                   size={FONTSIZE.size_20}
                   color={COLORS.WhiteRGBA50}
                 />
@@ -247,31 +255,31 @@ const MovieDetailScreen = ({navigation, route}: any) => {
           <TouchableOpacity
             style={styles.movieActionItem}
             activeOpacity={0.7}
-            onPress={() => saveBookmark(movieData)}>
+            onPress={saveBookmark}>
             <IconsSolid.BookmarkIcon
               size={FONTSIZE.size_24}
               color={isBookmarked ? 'yellow' : COLORS.White}
             />
-            <Text style={{color: COLORS.WhiteRGBA50, textAlign: 'center'}}>
+            <Text style={{ color: COLORS.WhiteRGBA50, textAlign: 'center' }}>
               Watchlist
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.movieActionItem}
             activeOpacity={0.7}
-            onPress={() => toggleLike(movieData)}>
+            onPress={toggleLike}>
             <IconsSolid.HeartIcon
               size={FONTSIZE.size_24}
               color={isLiked ? COLORS.Orange : COLORS.White}
             />
-            <Text style={{color: COLORS.WhiteRGBA50, textAlign: 'center'}}>
+            <Text style={{ color: COLORS.WhiteRGBA50, textAlign: 'center' }}>
               Menyukai
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.movieActionItem}
             activeOpacity={0.7}
-            onPress={() => {}}>
+            onPress={() => { }}>
             <IconsSolid.ChatBubbleBottomCenterIcon
               size={FONTSIZE.size_24}
               color={COLORS.White}
@@ -281,7 +289,7 @@ const MovieDetailScreen = ({navigation, route}: any) => {
           <TouchableOpacity
             style={styles.movieActionItem}
             activeOpacity={0.7}
-            onPress={() => {}}>
+            onPress={() => { }}>
             <IconsSolid.ShareIcon
               size={FONTSIZE.size_24}
               color={COLORS.White}
@@ -290,7 +298,7 @@ const MovieDetailScreen = ({navigation, route}: any) => {
           </TouchableOpacity>
         </View>
 
-        <View style={{position: 'relative', marginHorizontal: -14}}>
+        <View style={{ position: 'relative', marginHorizontal: -14 }}>
           {trailerId && (
             <YoutubePlayer
               height={250}
@@ -312,7 +320,7 @@ const MovieDetailScreen = ({navigation, route}: any) => {
             data={reviews}
             keyExtractor={(item: any) => item.id.toString()}
             horizontal
-            renderItem={({item: review}: any) => (
+            renderItem={({ item: review }: any) => (
               <View key={review.id} style={styles.reviewContainer}>
                 <View style={styles.reviewHeader}>
                   <Image
@@ -334,7 +342,7 @@ const MovieDetailScreen = ({navigation, route}: any) => {
                 {review.content.split('\n').length > 6 && (
                   <TouchableOpacity
                     onPress={() => toggleReviewExpansion(review.id)}>
-                    <Text style={{color: COLORS.Orange, marginTop: 5}}>
+                    <Text style={{ color: COLORS.Orange, marginTop: 5 }}>
                       {expandedReviews[review.id]
                         ? 'Lihat lebih sedikit'
                         : 'Lihat Selengkapnya'}
@@ -352,7 +360,7 @@ const MovieDetailScreen = ({navigation, route}: any) => {
         keyExtractor={(item: any) => item.id}
         horizontal
         contentContainerStyle={styles.containerGap24}
-        renderItem={({item, index}) => (
+        renderItem={({ item, index }) => (
           <ActorCastCard
             shouldMarginatedAtEnd={true}
             cardWidth={80}
@@ -369,14 +377,14 @@ const MovieDetailScreen = ({navigation, route}: any) => {
         visible={modalVisible}
         animationType="slide"
         onRequestClose={() => setModalVisible(false)}>
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           {trailerId ? (
             <Text>Playing</Text>
           ) : (
             <Text>Trailer not available</Text>
           )}
           <TouchableOpacity onPress={() => setModalVisible(false)}>
-            <Text style={{color: 'red', marginTop: 20}}>Close</Text>
+            <Text style={{ color: 'red', marginTop: 20 }}>Close</Text>
           </TouchableOpacity>
         </View>
       </Modal>

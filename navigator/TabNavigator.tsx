@@ -1,13 +1,11 @@
 import React from 'react';
 import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
-import {COLORS, FONTSIZE, SPACING} from '../theme/theme';
-import {View, StyleSheet} from 'react-native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { COLORS, FONTSIZE, SPACING } from '../theme/theme';
+import { View, StyleSheet } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TicketScreen from '../screens/TicketScreen';
-
 import * as IconsSolid from 'react-native-heroicons/solid';
-import UserProfileScreen from '../screens/UserProfileScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import BookmarkScreen from '../screens/BookmarkScreen';
 
@@ -29,12 +27,12 @@ const TabNavigator = () => {
         component={HomeScreen}
         options={{
           tabBarShowLabel: false,
-          tabBarIcon: ({focused, color, size}) => {
+          tabBarIcon: ({ focused, color, size }) => {
             return (
               <View
                 style={[
                   styles.activeTabBackground,
-                  focused ? {backgroundColor: COLORS.Orange} : {},
+                  focused ? { backgroundColor: COLORS.Orange } : {},
                 ]}>
                 <IconsSolid.HomeIcon
                   color={COLORS.White}
@@ -50,12 +48,12 @@ const TabNavigator = () => {
         component={SearchScreen}
         options={{
           tabBarShowLabel: false,
-          tabBarIcon: ({focused, color, size}) => {
+          tabBarIcon: ({ focused, color, size }) => {
             return (
               <View
                 style={[
                   styles.activeTabBackground,
-                  focused ? {backgroundColor: COLORS.Orange} : {},
+                  focused ? { backgroundColor: COLORS.Orange } : {},
                 ]}>
                 <IconsSolid.MagnifyingGlassIcon
                   color={COLORS.White}
@@ -71,12 +69,12 @@ const TabNavigator = () => {
         component={FavoritesScreen}
         options={{
           tabBarShowLabel: false,
-          tabBarIcon: ({focused, color, size}) => {
+          tabBarIcon: ({ focused, color, size }) => {
             return (
               <View
                 style={[
                   styles.activeTabBackground,
-                  focused ? {backgroundColor: COLORS.Orange} : {},
+                  focused ? { backgroundColor: COLORS.Orange } : {},
                 ]}>
                 <IconsSolid.HeartIcon
                   color={COLORS.White}
@@ -92,12 +90,12 @@ const TabNavigator = () => {
         component={BookmarkScreen}
         options={{
           tabBarShowLabel: false,
-          tabBarIcon: ({focused, color, size}) => {
+          tabBarIcon: ({ focused, color, size }) => {
             return (
               <View
                 style={[
                   styles.activeTabBackground,
-                  focused ? {backgroundColor: COLORS.Orange} : {},
+                  focused ? { backgroundColor: COLORS.Orange } : {},
                 ]}>
                 <IconsSolid.BookmarkIcon
                   color={COLORS.White}
@@ -113,12 +111,12 @@ const TabNavigator = () => {
         component={TicketScreen}
         options={{
           tabBarShowLabel: false,
-          tabBarIcon: ({focused, color, size}) => {
+          tabBarIcon: ({ focused, color, size }) => {
             return (
               <View
                 style={[
                   styles.activeTabBackground,
-                  focused ? {backgroundColor: COLORS.Orange} : {},
+                  focused ? { backgroundColor: COLORS.Orange } : {},
                 ]}>
                 <IconsSolid.TicketIcon
                   color={COLORS.White}
@@ -129,31 +127,6 @@ const TabNavigator = () => {
           },
         }}
       />
-      
-
-      {/* belum butuh */}
-      
-      {/* <Tab.Screen
-        name="User"
-        component={UserProfileScreen}
-        options={{
-          tabBarShowLabel: false,
-          tabBarIcon: ({focused, color, size}) => {
-            return (
-              <View
-                style={[
-                  styles.activeTabBackground,
-                  focused ? {backgroundColor: COLORS.Orange} : {},
-                ]}>
-                <IconsSolid.UserIcon
-                  color={COLORS.White}
-                  size={FONTSIZE.size_30}
-                />
-              </View>
-            );
-          },
-        }}
-      /> */}
     </Tab.Navigator>
   );
 };

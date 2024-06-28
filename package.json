@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.2.3",
+    "@expo/vector-icons": "^14.0.0",
     "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
@@ -23,6 +24,7 @@
     "expo-linear-gradient": "~13.0.2",
     "expo-secure-store": "~13.0.1",
     "expo-status-bar": "~1.12.1",
+    "firebase": "^10.12.2",
     "react": "18.2.0",
     "react-native": "0.74.2",
     "react-native-heroicons": "^4.0.0",
@@ -32,8 +34,7 @@
     "react-native-star-rating": "^1.1.0",
     "react-native-svg": "^15.3.0",
     "react-native-webview": "13.8.6",
-    "react-native-youtube-iframe": "^2.3.0",
-    "@expo/vector-icons": "^14.0.0"
+    "react-native-youtube-iframe": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

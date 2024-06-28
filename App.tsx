@@ -1,15 +1,16 @@
 import * as React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BookingSeatScreen from './screens/BookingSeatScreen';
 import TabNavigator from './navigator/TabNavigator';
-import {useFonts} from 'expo-font';
-import {ActivityIndicator} from 'react-native';
-import {COLORS} from './theme/theme';
+import { useFonts } from 'expo-font';
+import { ActivityIndicator } from 'react-native';
+import { COLORS } from './theme/theme';
 import MovieDetailScreen from './screens/MovieDetailScreen';
 import SplashScreen from './screens/SplashScreen';
 import UserProfileScreen from './screens/UserProfileScreen'; // Import UserProfileScreen
 import LoginScreen from './screens/LoginScreen';
+import RegisterScreen from './screens/RegisterScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,32 +33,42 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ animation: 'slide_from_left' }}
+        />
+        <Stack.Screen
+          name='Register'
+          component={RegisterScreen}
+          options={{ animation: 'slide_from_right' }}
+        />
         <Stack.Screen
           name="Tab"
           component={TabNavigator}
-          options={{animation: 'default'}}
+          options={{ animation: 'default' }}
         />
         <Stack.Screen
           name="MovieDetails"
           component={MovieDetailScreen}
-          options={{animation: 'slide_from_right'}}
+          options={{ animation: 'slide_from_right' }}
         />
         <Stack.Screen
           name="SeatBooking"
           component={BookingSeatScreen}
-          options={{animation: 'slide_from_bottom'}}
+          options={{ animation: 'slide_from_bottom' }}
         />
         <Stack.Screen
           name="UserProfile"
           component={UserProfileScreen}
-          options={{animation: 'slide_from_left'}}
+          options={{ animation: 'slide_from_left' }}
         />
         <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{animation: 'slide_from_left'}}
+          name='Profile'
+          component={UserProfileScreen}
+          options={{ animation: 'slide_from_right' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

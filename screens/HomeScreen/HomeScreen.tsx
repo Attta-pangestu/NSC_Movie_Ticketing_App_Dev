@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   ActivityIndicator,
   Dimensions,
@@ -17,16 +17,16 @@ import {
   getPopularMoviesList,
   getUpcomingMoviesList,
 } from '../../api/fetchAPi';
-import {styles} from './style';
+import { styles } from './style';
 import InputHeader from '../../components/InputHeader';
 import CategoryHeader from '../../components/CategoryHeader/Index';
 import MovieCard from '../../components/MovieCard';
 import SubMovieCard from '../../components/SubMovieCard';
-import {SPACING} from '../../theme/theme';
-import {baseImagePath} from '../../api/enpoint';
-import {LinearGradient} from 'expo-linear-gradient';
+import { SPACING } from '../../theme/theme';
+import { baseImagePath } from '../../api/enpoint';
+import { LinearGradient } from 'expo-linear-gradient';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 interface Movie {
   id: number;
@@ -41,7 +41,7 @@ interface HomeScreenProps {
   navigation: any;
 }
 
-const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
+const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const [nowPlayingMoviesList, setNowPlayingMoviesList] = useState<Movie[]>([]);
   const [popularMoviesList, setPopularMoviesList] = useState<Movie[]>([]);
   const [upcomingMoviesList, setUpcomingMoviesList] = useState<Movie[]>([]);
@@ -78,15 +78,15 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
     })();
   }, []);
 
-  const onViewRef = useRef((viewableItems: {changed: ViewToken[]}) => {
+  const onViewRef = useRef((viewableItems: { changed: ViewToken[] }) => {
     if (viewableItems.changed.length > 0) {
       setCurrentIndex(viewableItems.changed[0].index ?? 0);
     }
   });
-  const viewConfigRef = useRef({viewAreaCoveragePercentThreshold: 50});
+  const viewConfigRef = useRef({ viewAreaCoveragePercentThreshold: 50 });
 
-  const searchHandler = (query : any) => {
-    navigation.navigate('Search', {query});
+  const searchHandler = (query: any) => {
+    navigation.navigate('Search', { query });
   };
 
   const getCategoryData = () => {
@@ -115,7 +115,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
         bounces={false}
         contentContainerStyle={styles.scrollViewContainer}>
         <StatusBar hidden />
-        <InputHeader searchHandler={(query) => searchHandler(query) } />
+        <InputHeader searchHandler={(query) => searchHandler(query)} />
         <View style={styles.loadingContainer}>
           <ActivityIndicator size={'large'} color={'orange'} />
         </View>
@@ -135,10 +135,10 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
         showsHorizontalScrollIndicator={false}
         onViewableItemsChanged={onViewRef.current}
         viewabilityConfig={viewConfigRef.current}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <View>
             <Image
-              source={{uri: baseImagePath('w780', item.poster_path)}}
+              source={{ uri: baseImagePath('w780', item.poster_path) }}
               style={styles.bannerImage}
             />
             <LinearGradient
@@ -192,11 +192,11 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
               showsHorizontalScrollIndicator={false}
               decelerationRate={0}
               contentContainerStyle={styles.containerGap36}
-              renderItem={({item, index}) => (
+              renderItem={({ item, index }) => (
                 <MovieCard
                   shouldMarginatedAround={true}
                   cardFunction={() => {
-                    navigation.push('MovieDetails', {movieid: item.id});
+                    navigation.push('MovieDetails', { movieid: item.id });
                   }}
                   cardWidth={width * 0.7}
                   isFirst={index === 0}
@@ -217,11 +217,11 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
               showsHorizontalScrollIndicator={false}
               bounces={false}
               contentContainerStyle={styles.containerGap36}
-              renderItem={({item, index}) => (
+              renderItem={({ item, index }) => (
                 <SubMovieCard
                   shouldMarginatedAtEnd={true}
                   cardFunction={() => {
-                    navigation.push('MovieDetails', {movieid: item.id});
+                    navigation.push('MovieDetails', { movieid: item.id });
                   }}
                   cardWidth={width / 3}
                   isFirst={index === 0}
@@ -239,11 +239,11 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
               bounces={false}
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.containerGap36}
-              renderItem={({item, index}) => (
+              renderItem={({ item, index }) => (
                 <SubMovieCard
                   shouldMarginatedAtEnd={true}
                   cardFunction={() => {
-                    navigation.push('MovieDetails', {movieid: item.id});
+                    navigation.push('MovieDetails', { movieid: item.id });
                   }}
                   cardWidth={width / 3}
                   isFirst={index === 0}
@@ -261,11 +261,11 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
               showsHorizontalScrollIndicator={false}
               bounces={false}
               contentContainerStyle={styles.containerGap36}
-              renderItem={({item, index}) => (
+              renderItem={({ item, index }) => (
                 <SubMovieCard
                   shouldMarginatedAtEnd={true}
                   cardFunction={() => {
-                    navigation.push('MovieDetails', {movieid: item.id});
+                    navigation.push('MovieDetails', { movieid: item.id });
                   }}
                   cardWidth={width / 3}
                   isFirst={index === 0}
@@ -283,11 +283,11 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
               showsHorizontalScrollIndicator={false}
               bounces={false}
               contentContainerStyle={styles.containerGap36}
-              renderItem={({item, index}) => (
+              renderItem={({ item, index }) => (
                 <SubMovieCard
                   shouldMarginatedAtEnd={true}
                   cardFunction={() => {
-                    navigation.push('MovieDetails', {movieid: item.id});
+                    navigation.push('MovieDetails', { movieid: item.id });
                   }}
                   cardWidth={width / 3}
                   isFirst={index === 0}
@@ -305,11 +305,11 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
               showsHorizontalScrollIndicator={false}
               bounces={false}
               contentContainerStyle={styles.containerGap36}
-              renderItem={({item, index}) => (
+              renderItem={({ item, index }) => (
                 <SubMovieCard
                   shouldMarginatedAtEnd={true}
                   cardFunction={() => {
-                    navigation.push('MovieDetails', {movieid: item.id});
+                    navigation.push('MovieDetails', { movieid: item.id });
                   }}
                   cardWidth={width / 3}
                   isFirst={index === 0}
@@ -327,11 +327,11 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
               showsHorizontalScrollIndicator={false}
               bounces={false}
               contentContainerStyle={styles.containerGap36}
-              renderItem={({item, index}) => (
+              renderItem={({ item, index }) => (
                 <SubMovieCard
                   shouldMarginatedAtEnd={true}
                   cardFunction={() => {
-                    navigation.push('MovieDetails', {movieid: item.id});
+                    navigation.push('MovieDetails', { movieid: item.id });
                   }}
                   cardWidth={width / 3}
                   isFirst={index === 0}
@@ -351,12 +351,12 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
             numColumns={3}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.categoryContentContainer}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <SubMovieCard
                 shouldMarginatedAtEnd={false}
                 shouldMarginatedAround={true}
                 cardFunction={() => {
-                  navigation.push('MovieDetails', {movieid: item.id});
+                  navigation.push('MovieDetails', { movieid: item.id });
                 }}
                 cardWidth={width / 3 - SPACING.space_8 * 3}
                 title={item.original_title}
