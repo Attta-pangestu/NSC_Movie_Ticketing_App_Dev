@@ -90,15 +90,15 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
       const userBookmarksDoc = await userBookmarksRef.get();
       const isBookmarked = userBookmarksDoc.exists;
       if (isBookmarked) {
-        await userBookmarksRef.delete();
         setIsBookmarked(false);
+        await userBookmarksRef.delete();
       } else {
         const movieDataWithPosterPath = {
           ...movieData,
           poster_path: baseImagePath('w342', movieData.poster_path),
         };
-        await userBookmarksRef.set(movieDataWithPosterPath);
         setIsBookmarked(true);
+        await userBookmarksRef.set(movieDataWithPosterPath);
       }
     } catch (error) {
       console.error('Error saving bookmark:', error);
@@ -115,15 +115,15 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
       const userLikesDoc = await userLikesRef.get();
       const isLiked = userLikesDoc.exists;
       if (isLiked) {
-        await userLikesRef.delete();
         setIsLiked(false);
+        await userLikesRef.delete();
       } else {
         const movieDataWithPosterPath = {
           ...movieData,
           poster_path: baseImagePath('w342', movieData.poster_path),
         };
-        await userLikesRef.set(movieDataWithPosterPath);
         setIsLiked(true);
+        await userLikesRef.set(movieDataWithPosterPath);
       }
     } catch (error) {
       console.error('Error toggling like:', error);

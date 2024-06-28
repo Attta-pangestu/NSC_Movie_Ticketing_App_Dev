@@ -1,34 +1,40 @@
+import React, { useState } from 'react';
 import {
-  FlatList,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  ToastAndroid,
-  TouchableOpacity,
   View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  FlatList,
+  StatusBar,
+  ToastAndroid,
+  ImageBackground,
 } from 'react-native';
-import React, {useState} from 'react';
-import {generateDate, generateSeats, timeArray} from '../../utils';
-import {ImageBackground} from 'react-native';
-import {styles} from './style';
-import {LinearGradient} from 'expo-linear-gradient';
-import {COLORS, FONTSIZE, SPACING} from '../../theme/theme';
-import AppHeader from '../../components/AppHeader';
-import * as IconsSolid from 'react-native-heroicons/solid';
+import { WebView } from 'react-native-webview';
+import axios from 'axios';
 import * as EncryptedStorage from 'expo-secure-store';
+import { styles } from './style';
+import { generateDate, generateOrderId, generateSeats, timeArray } from '../../utils';
+import AppHeader from '../../components/AppHeader';
+import { COLORS, FONTSIZE, SPACING } from '../../theme/theme';
+import { LinearGradient } from 'expo-linear-gradient';
+import * as IconsSolid from 'react-native-heroicons/solid';
 
-const BookingSeatScreen = ({navigation, route}: any) => {
+
+const BookingSeatScreen = ({ navigation, route }: any) => {
   const [dateArray, setDateArray] = useState<any[]>(generateDate());
   const [selectedDateIndex, setSelectedDateIndex] = useState<any>();
   const [price, setPrice] = useState<number>(0);
   const [twoSeatArray, setTwoSeatArray] = useState<any[][]>(generateSeats());
-  const [selectedSeatArray, setSelectedSeatArray] = useState([]);
+  const [selectedSeatArray, setSelectedSeatArray] = useState<number[]>([]);
   const [selectedTimeIndex, setSelectedTimeIndex] = useState<any>();
+  const [showWebView, setShowWebView] = useState<boolean>(false);
+  const [redirectUrl, setRedirectUrl] = useState<string>('');
+
+
 
   const selectSeat = (index: number, subindex: number, num: number) => {
     if (!twoSeatArray[index][subindex].taken) {
-      let array: any = [...selectedSeatArray];
+      let array: number[] = [...selectedSeatArray];
       let temp = [...twoSeatArray];
       temp[index][subindex].selected = !temp[index][subindex].selected;
       if (!array.includes(num)) {
@@ -46,11 +52,12 @@ const BookingSeatScreen = ({navigation, route}: any) => {
     }
   };
 
-  async function bookSeatHandler() {
+
+  const bookSeatHandler = async () => {
     if (
       selectedSeatArray.length !== 0 &&
-      timeArray[selectedTimeIndex] !== undefined &&
-      dateArray[selectedDateIndex] !== undefined
+      selectedTimeIndex !== undefined &&
+      selectedDateIndex !== undefined
     ) {
       try {
         await EncryptedStorage.setItemAsync(
@@ -60,27 +67,59 @@ const BookingSeatScreen = ({navigation, route}: any) => {
             time: timeArray[selectedTimeIndex],
             date: dateArray[selectedDateIndex],
             ticketImage: route.params.PosterImage,
-          }),
+          })
         );
+        const order_id = generateOrderId(); 
+        const response = await axios.post(
+          'https://nsc-midtrans-payment-server.vercel.app/api/payment',
+          {
+            order_id: order_id,
+            gross_amount: price * 1000,
+          }
+        );
+
+        const { redirect_url } = response.data;
+        setRedirectUrl(redirect_url);
+        setShowWebView(true);
       } catch (error) {
-        console.error(
-          'Something went Wrong while storing in BookSeats Functions',
-          error,
+        ToastAndroid.showWithGravity(
+          'Failed to process payment. Please try again later.',
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM
         );
+        console.error('Something went Wrong while storing in BookSeats Functions', error);
       }
+
+    } else {
+      ToastAndroid.showWithGravity(
+        'Please Select Seats, Date and Time of the Show',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM
+      );
+    }
+  };
+
+  const handleWebViewNavigationStateChange = (newNavState : any) => {
+    const { url } = newNavState;
+    if (url.includes('transaction_status=settlement') || url.includes('transaction_status=capture')) {
+      // Payment successful, navigate to Ticket screen
+      setShowWebView(false);
       navigation.navigate('Ticket', {
         seatArray: selectedSeatArray,
         time: timeArray[selectedTimeIndex],
         date: dateArray[selectedDateIndex],
         ticketImage: route.params.PosterImage,
       });
-    } else {
-      ToastAndroid.showWithGravity(
-        'Please Select Seats, Date and Time of the Show',
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-      );
     }
+  };
+
+  if (showWebView) {
+    return (
+      <WebView
+        source={{ uri: redirectUrl }}
+        onNavigationStateChange={handleWebViewNavigationStateChange}
+      />
+    );
   }
 
   return (
@@ -233,5 +272,7 @@ const BookingSeatScreen = ({navigation, route}: any) => {
     </ScrollView>
   );
 };
+
+
 
 export default BookingSeatScreen;
