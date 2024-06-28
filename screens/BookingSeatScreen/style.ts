@@ -126,4 +126,15 @@ export const styles = StyleSheet.create({
     color: COLORS.White,
     backgroundColor: COLORS.Orange,
   },
+  seatWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 5,
+  },
+  seatNumber: {
+    position: 'absolute',
+    fontSize: 10,
+    color: COLORS.White,
+  },
+  
 });

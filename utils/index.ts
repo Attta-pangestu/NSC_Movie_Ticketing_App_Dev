@@ -71,3 +71,9 @@ export const timeArray: string[] = [
   '19:30',
   '21:00',
 ];
+
+export const generateOrderId = () => {
+  const timestamp = Date.now().toString(); // Timestamp sebagai bagian dari order_id
+  const randomNumber = Math.floor(Math.random() * 10000); // Nomor acak
+  return `${timestamp}-${randomNumber}`;
+};
