@@ -1,18 +1,42 @@
 import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { COLORS } from '../../theme/theme';
 import * as IconsSolid from 'react-native-heroicons/solid';
 import { styles } from './style';
+import { auth, db } from '../../api/firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LoginScreen = ({ navigation }: any) => {
+type Props = {
+  navigation: any;
+};
+
+const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const handleLogin = () => {
-  };
-
-  const handleGoogleLogin = () => {
+  const handleLogin = async () => {
+    try {
+      const userCredential = await auth.signInWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+      if (user) {
+        await db.collection('users').doc(user.uid).set({
+          email: user.email,
+          lastLogin: new Date()
+        }, { merge: true });
+        const token = await user.getIdToken();
+        await AsyncStorage.setItem('token', token);
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        if (userDoc.exists) {
+          console.log('User Data:', userDoc.data());
+        }
+        navigation.navigate('Tab');
+      } else {
+        console.error('No user returned from authentication.');
+      }
+    } catch (error) {
+      Alert.alert('Login Error', (error as Error).message);
+    }
   };
 
   return (
@@ -42,13 +66,11 @@ const LoginScreen = ({ navigation }: any) => {
         Login
       </Button>
       <Text style={styles.orText}>OR</Text>
-      <Button mode="outlined" onPress={handleGoogleLogin} style={styles.googleButton}>
-        Login with Google
+      <Button mode="outlined" theme={{ colors: { primary: COLORS.Orange } }} onPress={() => navigation.navigate('Register')} style={styles.registerButton}>
+        Register
       </Button>
     </View>
   );
 };
-
-
 
 export default LoginScreen;
