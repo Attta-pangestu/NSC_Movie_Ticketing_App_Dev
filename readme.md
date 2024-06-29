@@ -91,7 +91,14 @@ Lokasi preview aplikasi terdapat di direktori: `./assets/preview-app/`
 
 ## Kontributor dan Fitur yang Dikerjakan
 
-1. **ATHA RIZKI PANGESTU **
+1. **ATHA RIZKI PANGESTU (Owner)**
+   - Home Screen
+   - Movie Detail Screen
+   - Ticketing Screen
+   - Booking Seat Screen
+   - Pembuatan dan Integrasi Payment Gateway Midtrans
+   - Splashscreen
+   - Pembuatan Layout dan Desain Aplikasi
 2. **RAHMAT HIDAYAT**
    - Favorite Screen
    - Bookmark Screen
@@ -107,3 +114,8 @@ Lokasi preview aplikasi terdapat di direktori: `./assets/preview-app/`
    - Fetching Fungsi
    - Search Screen
 
+## Kesimpulan
+
+NSC Movie Ticketing App adalah solusi lengkap bagi penonton bioskop di Belitung. Aplikasi ini tidak hanya memudahkan pemesanan tiket tetapi juga menyediakan informasi film yang komprehensif serta fitur tambahan seperti suka dan watchlist. Dikembangkan oleh tim yang berdedikasi, aplikasi ini memberikan pengalaman menonton yang terbaik bagi pengguna.
+
+Untuk informasi lebih lanjut dan kontribusi, silakan kunjungi [repository GitHub](https://github.com/Attta-pangestu/NSC_Movie_Ticketing_App_Dev).
