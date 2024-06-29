@@ -102,7 +102,6 @@ const BookingSeatScreen = ({ navigation, route }: any) => {
   const handleWebViewNavigationStateChange = (newNavState : any) => {
     const { url } = newNavState;
     if (url.includes('transaction_status=settlement') || url.includes('transaction_status=capture')) {
-      // Payment successful, navigate to Ticket screen
       setShowWebView(false);
       navigation.navigate('Ticket', {
         seatArray: selectedSeatArray,
