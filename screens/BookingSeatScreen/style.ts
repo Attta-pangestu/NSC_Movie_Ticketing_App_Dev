@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
   BORDERRADIUS,
   COLORS,
@@ -136,5 +136,37 @@ export const styles = StyleSheet.create({
     fontSize: 10,
     color: COLORS.White,
   },
-  
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: '90%',
+    height: '80%',
+    backgroundColor: COLORS.White,
+    borderRadius: 10,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: SPACING.space_10,
+  },
+  title: {
+    fontSize: FONTSIZE.size_16,
+    color: COLORS.Black,
+    fontFamily: FONTFAMILY.poppins_medium,
+  },
+  closeButton: {
+    padding: SPACING.space_24,
+  },
+  closeIcon: {
+    color: COLORS.Orange,
+  },
+  webView: {
+    width: '100%',
+    height: '100%',
+  },
 });
