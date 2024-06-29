@@ -9,7 +9,6 @@ import {
   ToastAndroid,
   ImageBackground,
 } from 'react-native';
-import { WebView } from 'react-native-webview';
 import axios from 'axios';
 import * as EncryptedStorage from 'expo-secure-store';
 import { styles } from './style';
@@ -18,7 +17,7 @@ import AppHeader from '../../components/AppHeader';
 import { COLORS, FONTSIZE, SPACING } from '../../theme/theme';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as IconsSolid from 'react-native-heroicons/solid';
-
+import Payment from './Payment';
 
 const BookingSeatScreen = ({ navigation, route }: any) => {
   const [dateArray, setDateArray] = useState<any[]>(generateDate());
@@ -29,8 +28,6 @@ const BookingSeatScreen = ({ navigation, route }: any) => {
   const [selectedTimeIndex, setSelectedTimeIndex] = useState<any>();
   const [showWebView, setShowWebView] = useState<boolean>(false);
   const [redirectUrl, setRedirectUrl] = useState<string>('');
-
-
 
   const selectSeat = (index: number, subindex: number, num: number) => {
     if (!twoSeatArray[index][subindex].taken) {
@@ -52,7 +49,6 @@ const BookingSeatScreen = ({ navigation, route }: any) => {
     }
   };
 
-
   const bookSeatHandler = async () => {
     if (
       selectedSeatArray.length !== 0 &&
@@ -69,7 +65,7 @@ const BookingSeatScreen = ({ navigation, route }: any) => {
             ticketImage: route.params.PosterImage,
           })
         );
-        const order_id = generateOrderId(); 
+        const order_id = generateOrderId();
         const response = await axios.post(
           'https://nsc-midtrans-payment-server.vercel.app/api/payment',
           {
@@ -99,7 +95,7 @@ const BookingSeatScreen = ({ navigation, route }: any) => {
     }
   };
 
-  const handleWebViewNavigationStateChange = (newNavState : any) => {
+  const handleWebViewNavigationStateChange = (newNavState: any) => {
     const { url } = newNavState;
     if (url.includes('transaction_status=settlement') || url.includes('transaction_status=capture')) {
       setShowWebView(false);
@@ -112,15 +108,6 @@ const BookingSeatScreen = ({ navigation, route }: any) => {
     }
   };
 
-  if (showWebView) {
-    return (
-      <WebView
-        source={{ uri: redirectUrl }}
-        onNavigationStateChange={handleWebViewNavigationStateChange}
-      />
-    );
-  }
-
   return (
     <ScrollView
       style={styles.container}
@@ -129,7 +116,7 @@ const BookingSeatScreen = ({ navigation, route }: any) => {
       <StatusBar hidden />
       <View>
         <ImageBackground
-          source={{uri: route.params?.BgImage}}
+          source={{ uri: route.params?.BgImage }}
           style={styles.ImageBG}>
           <LinearGradient
             colors={[COLORS.BlackRGB10, COLORS.Black]}
@@ -203,19 +190,19 @@ const BookingSeatScreen = ({ navigation, route }: any) => {
           horizontal
           bounces={false}
           contentContainerStyle={styles.containerGap24}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return (
               <TouchableOpacity onPress={() => setSelectedDateIndex(index)}>
                 <View
                   style={[
                     styles.dateContainer,
                     index == 0
-                      ? {marginLeft: SPACING.space_24}
+                      ? { marginLeft: SPACING.space_24 }
                       : index == dateArray.length - 1
-                        ? {marginRight: SPACING.space_24}
+                        ? { marginRight: SPACING.space_24 }
                         : {},
                     index == selectedDateIndex
-                      ? {backgroundColor: COLORS.Orange}
+                      ? { backgroundColor: COLORS.Orange }
                       : {},
                   ]}>
                   <Text style={styles.dateText}>{item.date}</Text>
@@ -234,19 +221,19 @@ const BookingSeatScreen = ({ navigation, route }: any) => {
           horizontal
           bounces={false}
           contentContainerStyle={styles.containerGap24}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return (
               <TouchableOpacity onPress={() => setSelectedTimeIndex(index)}>
                 <View
                   style={[
                     styles.timeContainer,
                     index == 0
-                      ? {marginLeft: SPACING.space_24}
+                      ? { marginLeft: SPACING.space_24 }
                       : index == dateArray.length - 1
-                        ? {marginRight: SPACING.space_24}
+                        ? { marginRight: SPACING.space_24 }
                         : {},
                     index == selectedTimeIndex
-                      ? {backgroundColor: COLORS.Orange}
+                      ? { backgroundColor: COLORS.Orange }
                       : {},
                   ]}>
                   <Text style={styles.timeText}>{item}</Text>
@@ -268,10 +255,15 @@ const BookingSeatScreen = ({ navigation, route }: any) => {
           <Text style={styles.buttonText}>Checkout Ticket</Text>
         </TouchableOpacity>
       </View>
+
+      <Payment
+        redirectUrl={redirectUrl}
+        handleWebViewNavigationStateChange={handleWebViewNavigationStateChange}
+        showWebView={showWebView}
+        setShowWebView={setShowWebView}
+      />
     </ScrollView>
   );
 };
-
-
 
 export default BookingSeatScreen;
