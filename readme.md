@@ -59,8 +59,6 @@ Bioskop NSC X Meirobie di Belitung adalah bioskop modern yang baru dibuka setela
 
 ## Preview Aplikasi
 
-Lokasi preview aplikasi terdapat di direktori: `./assets/preview-app/`
-
 ### Preview 1
 
 ![Preview 1](./assets/preview-app/preview-1.jpg)
@@ -91,7 +89,7 @@ Lokasi preview aplikasi terdapat di direktori: `./assets/preview-app/`
 
 ## Kontributor dan Fitur yang Dikerjakan
 
-1. **ATHA RIZKI PANGESTU (Owner)**
+1. **ATHA RIZKI PANGESTU **
    - Home Screen
    - Movie Detail Screen
    - Ticketing Screen
@@ -113,9 +111,5 @@ Lokasi preview aplikasi terdapat di direktori: `./assets/preview-app/`
    - Pembuatan Endpoint
    - Fetching Fungsi
    - Search Screen
+   - Splash Screen
 
-## Kesimpulan
-
-NSC Movie Ticketing App adalah solusi lengkap bagi penonton bioskop di Belitung. Aplikasi ini tidak hanya memudahkan pemesanan tiket tetapi juga menyediakan informasi film yang komprehensif serta fitur tambahan seperti suka dan watchlist. Dikembangkan oleh tim yang berdedikasi, aplikasi ini memberikan pengalaman menonton yang terbaik bagi pengguna.
-
-Untuk informasi lebih lanjut dan kontribusi, silakan kunjungi [repository GitHub](https://github.com/Attta-pangestu/NSC_Movie_Ticketing_App_Dev).
