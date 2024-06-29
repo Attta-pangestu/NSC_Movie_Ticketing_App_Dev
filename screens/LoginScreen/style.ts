@@ -21,6 +21,7 @@ export const styles = StyleSheet.create({
   input: {
     width: '100%',
     marginBottom: 20,
+    color: COLORS.White,
   },
   loginButton: {
     width: '100%',

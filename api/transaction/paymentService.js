@@ -1,4 +1,3 @@
-// File: PaymentService.js
 
 import axios from 'axios';
 

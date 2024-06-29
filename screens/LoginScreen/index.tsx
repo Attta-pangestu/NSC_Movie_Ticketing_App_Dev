@@ -6,6 +6,9 @@ import * as IconsSolid from 'react-native-heroicons/solid';
 import { styles } from './style';
 import { auth, db } from '../../api/firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Modal from "react-native-modal";
+import { Overlay } from 'react-native-elements';
+
 
 type Props = {
   navigation: any;
@@ -14,8 +17,12 @@ type Props = {
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isLoginSuccess, setIsLoginSuccess] = useState(false);
+
 
   const handleLogin = async () => {
+    setIsLoggingIn(true);
     try {
       const userCredential = await auth.signInWithEmailAndPassword(email, password);
       const user = userCredential.user;
@@ -29,12 +36,16 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         const userDoc = await db.collection('users').doc(user.uid).get();
         if (userDoc.exists) {
           console.log('User Data:', userDoc.data());
+          setIsLoggingIn(false)
         }
+        setIsLoggingIn(false)
         navigation.navigate('Tab');
       } else {
+        setIsLoggingIn(false)
         console.error('No user returned from authentication.');
       }
     } catch (error) {
+      setIsLoggingIn(false)
       Alert.alert('Login Error', (error as Error).message);
     }
   };
@@ -49,7 +60,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         onChangeText={setEmail}
         style={styles.input}
         mode="outlined"
-        theme={{ colors: { text: COLORS.White, placeholder: COLORS.WhiteRGBA32, primary: COLORS.Orange, background: '#0b0b0b' } }}
+        theme={{ colors: { text: COLORS.White, placeholder: COLORS.WhiteRGBA50, primary: COLORS.Orange, background: '#0b0b0b' } }}
         keyboardType="email-address"
         autoCapitalize="none"
       />
@@ -65,6 +76,14 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
       <Button mode="contained" onPress={handleLogin} style={styles.loginButton}>
         Login
       </Button>
+      <Modal isVisible={isLoggingIn}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ color: COLORS.White }}>Logging in...</Text>
+        </View>
+      </Modal>
+      <Overlay isVisible={isLoginSuccess}>
+        <Text style={{ color: COLORS.Black }}>Login Successful!</Text>
+      </Overlay>
       <Text style={styles.orText}>OR</Text>
       <Button mode="outlined" theme={{ colors: { primary: COLORS.Orange } }} onPress={() => navigation.navigate('Register')} style={styles.registerButton}>
         Register

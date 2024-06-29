@@ -8,7 +8,7 @@ import { ActivityIndicator } from 'react-native';
 import { COLORS } from './theme/theme';
 import MovieDetailScreen from './screens/MovieDetailScreen';
 import SplashScreen from './screens/SplashScreen';
-import UserProfileScreen from './screens/UserProfileScreen'; // Import UserProfileScreen
+import UserProfileScreen from './screens/UserProfileScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 
