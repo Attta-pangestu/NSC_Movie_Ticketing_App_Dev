@@ -260,4 +260,42 @@ export const styles = StyleSheet.create({
     fontSize: FONTSIZE.size_12,
     color: COLORS.WhiteRGBA75,
   },
+  commentInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: SPACING.space_16,
+    marginTop: SPACING.space_16,
+  },
+  commentInput: {
+    flex: 1,
+    height: 100,
+    marginTop: SPACING.space_10, 
+    backgroundColor: COLORS.WhiteRGBA15,
+    borderRadius: BORDERRADIUS.radius_10,
+    paddingHorizontal: SPACING.space_16,
+    paddingVertical: SPACING.space_8,
+    color: COLORS.White,
+  },
+  sendButton: {
+    marginLeft: SPACING.space_8,
+    backgroundColor: COLORS.Orange,
+    borderRadius: BORDERRADIUS.radius_25,
+    padding: SPACING.space_8,
+  },
+  commentsContainer: {
+    marginHorizontal: SPACING.space_16,
+    marginTop: SPACING.space_24,
+  },
+  commentItem: {
+    flexDirection: 'row', 
+    alignItems: 'center',
+    marginBottom: SPACING.space_8,
+  },
+  commentAvatar: {
+    marginRight: SPACING.space_8,  
+  },
+  commentText: {
+    color: COLORS.White,
+    fontSize: FONTSIZE.size_14,
+  },
 });

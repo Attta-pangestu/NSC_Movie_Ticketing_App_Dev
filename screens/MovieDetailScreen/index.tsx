@@ -11,6 +11,7 @@ import {
   View,
   Modal,
   Dimensions,
+  TextInput
 } from 'react-native';
 import {
   getMovieCastDetails,
@@ -42,6 +43,8 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
   const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [reviews, setReviews] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
   const [expandedReviews, setExpandedReviews] = useState<{
     [key: string]: boolean;
   }>({});
@@ -131,6 +134,18 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
     }
   };
 
+  const handleSendComment = () => {
+    if (newComment.trim() !== '') {
+      const comment : any= {
+        id: Date.now(),
+        author: "You", // Example of setting the author of the comment
+        content: newComment,
+        author_details: { avatar_path: null } // Example structure, adjust as needed
+      };
+      setReviews([comment, ...reviews]); // Add the new comment to the beginning of reviews
+      setNewComment('');
+    }
+  };
 
   const toggleReviewExpansion = (reviewId: string) => {
     setExpandedReviews((prevState) => ({
@@ -327,7 +342,7 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
                     source={{
                       uri: review.author_details.avatar_path
                         ? `https://image.tmdb.org/t/p/w45${review.author_details.avatar_path}`
-                        : 'default-avatar.png',
+                        : 'https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-479x512-n8sg74wg.png',
                     }}
                     style={styles.reviewAvatar}
                   />
@@ -352,6 +367,22 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
               </View>
             )}
           />
+
+        <View style={styles.commentInputContainer}>
+          <TextInput
+            style={styles.commentInput}
+            placeholder="Tulis komentar..."
+            value={newComment}
+            onChangeText={text => setNewComment(text)}
+          />
+          <TouchableOpacity 
+            style={styles.sendButton}
+            onPress={handleSendComment}
+          >
+            <IconsSolid.PaperAirplaneIcon color="white" size={20} />
+          </TouchableOpacity>
+        </View>
+
         </View>
       </View>
       <CategoryHeader title="Pemain Film" />
