@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
   movieCastDetails,
   movieDetails,
@@ -11,12 +12,11 @@ import {
 
 export const getNowPlayingMoviesList = async () => {
   try {
-    let response = await fetch(nowPlayingMovies);
-    let json = await response.json();
-    return json;
+    const response = await axios.get(nowPlayingMovies);
+    return response.data;
   } catch (error) {
     console.error(
-      ' Something went wrong in getNowPlayingMoviesList Function',
+      'Something went wrong in getNowPlayingMoviesList Function',
       error,
     );
   }
@@ -24,12 +24,11 @@ export const getNowPlayingMoviesList = async () => {
 
 export const getUpcomingMoviesList = async () => {
   try {
-    let response = await fetch(upcomingMovies);
-    let json = await response.json();
-    return json;
+    const response = await axios.get(upcomingMovies);
+    return response.data;
   } catch (error) {
     console.error(
-      ' Something went wrong in getUpcomingMoviesList Function',
+      'Something went wrong in getUpcomingMoviesList Function',
       error,
     );
   }
@@ -37,12 +36,11 @@ export const getUpcomingMoviesList = async () => {
 
 export const getPopularMoviesList = async () => {
   try {
-    let response = await fetch(popularMovies);
-    let json = await response.json();
-    return json;
+    const response = await axios.get(popularMovies);
+    return response.data;
   } catch (error) {
     console.error(
-      ' Something went wrong in getPopularMoviesList Function',
+      'Something went wrong in getPopularMoviesList Function',
       error,
     );
   }
@@ -50,9 +48,8 @@ export const getPopularMoviesList = async () => {
 
 export const getMovieDetails = async (movieid: number) => {
   try {
-    let response = await fetch(movieDetails(movieid));
-    let json = await response.json();
-    return json;
+    const response = await axios.get(movieDetails(movieid));
+    return response.data;
   } catch (error) {
     console.error('Something Went wrong in getMoviesDetails Function', error);
   }
@@ -60,9 +57,8 @@ export const getMovieDetails = async (movieid: number) => {
 
 export const getMovieCastDetails = async (movieid: number) => {
   try {
-    let response = await fetch(movieCastDetails(movieid));
-    let json = await response.json();
-    return json;
+    const response = await axios.get(movieCastDetails(movieid));
+    return response.data;
   } catch (error) {
     console.error(
       'Something Went wrong in getMovieCastDetails Function',
@@ -73,9 +69,8 @@ export const getMovieCastDetails = async (movieid: number) => {
 
 export const getMoviesByCategory = async (genreId: number) => {
   try {
-    let response = await fetch(moviesByCategory(genreId));
-    let json = await response.json();
-    return json;
+    const response = await axios.get(moviesByCategory(genreId));
+    return response.data;
   } catch (error) {
     console.error(
       'Something went wrong in getMoviesByCategory Function',
@@ -85,21 +80,24 @@ export const getMoviesByCategory = async (genreId: number) => {
 };
 
 export const getMovieTrailer = async (id: number) => {
-  const response = await fetch(movieTrailer(id));
-  const data = await response.json();
-  const trailers = data.results.filter(
-    (video: any) => video.type === 'Trailer' && video.site === 'YouTube',
-  );
-  return trailers.length 
-    ? trailers[0].key
-    : null;
+  try {
+    const response = await axios.get(movieTrailer(id));
+    const data = response.data;
+    const trailers = data.results.filter(
+      (video: any) => video.type === 'Trailer' && video.site === 'YouTube',
+    );
+    return trailers.length 
+      ? trailers[0].key
+      : null;
+  } catch (error) {
+    console.error('Something went wrong in getMovieTrailer Function', error);
+  }
 };
 
 export const getMovieReviews = async (movieid: number) => {
   try {
-    let response = await fetch(movieReviews(movieid));
-    let json = await response.json();
-    return json;
+    const response = await axios.get(movieReviews(movieid));
+    return response.data;
   } catch (error) {
     console.error('Something Went wrong in getMovieReviews Function', error);
   }
