@@ -195,6 +195,4 @@ atau
 yarn start
 ```
 
----
 
-Dengan penjelasan di atas, README.md proyek Anda akan memberikan informasi yang lengkap tentang struktur direktori, layar, komponen, pustaka yang digunakan, dan fungsinya, serta panduan untuk memulai proyek.
