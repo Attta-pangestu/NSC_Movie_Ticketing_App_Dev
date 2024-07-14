@@ -31,6 +31,13 @@
       "eas": {
         "projectId": "935b8c26-a2e8-4251-a898-04efb145b61b"
       }
+    },
+    "owner": "attta_pangestu",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/935b8c26-a2e8-4251-a898-04efb145b61b"
     }
   }
 }
