@@ -8,6 +8,8 @@ import {
   moviesByCategory,
   movieTrailer,
   movieReviews,
+  movieRecommendations,
+  moviesByActor,
 } from './enpoint';
 
 export const getNowPlayingMoviesList = async () => {
@@ -100,5 +102,26 @@ export const getMovieReviews = async (movieid: number) => {
     return response.data;
   } catch (error) {
     console.error('Something Went wrong in getMovieReviews Function', error);
+  }
+};
+
+export const getMovieRecommendations = async (movieid: number) => {
+  try {
+    const response = await axios.get(movieRecommendations(movieid));
+    return response.data;
+  } catch (error) {
+    console.error(
+      'Something went wrong in getMovieRecommendations Function',
+      error,
+    );
+  }
+};
+
+export const getMoviesByActor = async (actorId: number) => {
+  try {
+    const response = await axios.get(moviesByActor(actorId));
+    return response.data;
+  } catch (error) {
+    console.error('Something went wrong in getMoviesByActor Function', error);
   }
 };

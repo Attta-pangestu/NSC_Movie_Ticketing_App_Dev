@@ -11,6 +11,7 @@ import SplashScreen from './screens/SplashScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
+import MovieListScreen from './screens/MovieListScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -45,16 +46,22 @@ const App = () => {
           component={RegisterScreen}
           options={{ animation: 'slide_from_right' }}
         />
+         <Stack.Screen
+          name='MovieDetails'
+          component={MovieDetailScreen}
+          options={{ animation: 'slide_from_right' }}
+        />
+        <Stack.Screen
+          name='MovieListScreen'
+          component={MovieListScreen}
+          options={{ animation: 'slide_from_right' }}
+        />
         <Stack.Screen
           name="Tab"
           component={TabNavigator}
           options={{ animation: 'default' }}
         />
-        <Stack.Screen
-          name="MovieDetails"
-          component={MovieDetailScreen}
-          options={{ animation: 'slide_from_right' }}
-        />
+       
         <Stack.Screen
           name="SeatBooking"
           component={BookingSeatScreen}

@@ -11,12 +11,15 @@ import {
   View,
   Modal,
   Dimensions,
+  TextInput
 } from 'react-native';
 import {
   getMovieCastDetails,
   getMovieDetails,
   getMovieReviews,
   getMovieTrailer,
+  getMovieRecommendations,
+  getMoviesByActor 
 } from '../../api/fetchAPi';
 import { styles } from './style';
 import AppHeader from '../../components/AppHeader';
@@ -27,9 +30,9 @@ import CategoryHeader from '../../components/CategoryHeader/Index';
 import ActorCastCard from '../../components/ActorCast';
 import { LinearGradient } from 'expo-linear-gradient';
 import StarRating from './_component/StarRating';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import { auth, db } from '../../api/firebase';
+import SubMovieCard from '../../components/SubMovieCard';
 
 const { width } = Dimensions.get('screen');
 
@@ -40,8 +43,11 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [rating, setRating] = useState<number>(0);
   const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
+  const [recommendedMovies, setRecommendedMovies] = useState<any[]>([]);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [reviews, setReviews] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
   const [expandedReviews, setExpandedReviews] = useState<{
     [key: string]: boolean;
   }>({});
@@ -51,35 +57,39 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
       const tempMovieData = await getMovieDetails(route.params.movieid);
       setMovieData(tempMovieData);
       setRating(tempMovieData.vote_average);
-
+  
       const userId = auth.currentUser?.uid;
       if (userId) {
         const userBookmarksRef = db.collection('users').doc(userId).collection('bookmarks').doc(route.params.movieid.toString());
         const userBookmarksDoc = await userBookmarksRef.get();
         setIsBookmarked(userBookmarksDoc.exists);
-
+  
         const userLikesRef = db.collection('users').doc(userId).collection('likes').doc(route.params.movieid.toString());
         const userLikesDoc = await userLikesRef.get();
         setIsLiked(userLikesDoc.exists);
       }
     })();
-
+  
     (async () => {
       const tempMovieCastData = await getMovieCastDetails(route.params.movieid);
       setmovieCastData(tempMovieCastData.cast);
     })();
-
+  
     (async () => {
       const trailerUrl = await getMovieTrailer(route.params.movieid);
       setTrailerId(trailerUrl);
     })();
-
+  
     (async () => {
       const reviewsData = await getMovieReviews(route.params.movieid);
       setReviews(reviewsData.results);
     })();
+  
+    (async () => {
+      const recommendationsData = await getMovieRecommendations(route.params.movieid);
+      setRecommendedMovies(recommendationsData.results);
+    })();
   }, [route.params.movieid, isBookmarked, isLiked]);
-
   const saveBookmark = async () => {
     try {
       const userId = auth.currentUser?.uid;
@@ -131,6 +141,18 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
     }
   };
 
+  const handleSendComment = () => {
+    if (newComment.trim() !== '') {
+      const comment : any= {
+        id: Date.now(),
+        author: "You", // Example of setting the author of the comment
+        content: newComment,
+        author_details: { avatar_path: null } // Example structure, adjust as needed
+      };
+      setReviews([comment, ...reviews]); // Add the new comment to the beginning of reviews
+      setNewComment('');
+    }
+  };
 
   const toggleReviewExpansion = (reviewId: string) => {
     setExpandedReviews((prevState) => ({
@@ -138,6 +160,12 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
       [reviewId]: !prevState[reviewId],
     }));
   };
+
+  const handleActorPress = (actorId: number, actorName: string) => {
+    navigation.push('MovieListScreen', { actorId, title: actorName });
+  };
+  
+  
 
   if (
     movieData === undefined &&
@@ -310,12 +338,12 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
         </View>
 
         <View style={styles.descriptionContainer}>
-          <Text style={styles.descriptionTitle}>Summary</Text>
+          <Text style={styles.descriptionTitle}>Ringkasan Film</Text>
           <View>
             <Text style={styles.descriptionText}>{movieData?.overview}</Text>
           </View>
 
-          <Text style={styles.descriptionTitle}>Reviews</Text>
+          <Text style={styles.descriptionTitle}>Ulasan Film Ini</Text>
           <FlatList
             data={reviews}
             keyExtractor={(item: any) => item.id.toString()}
@@ -327,7 +355,7 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
                     source={{
                       uri: review.author_details.avatar_path
                         ? `https://image.tmdb.org/t/p/w45${review.author_details.avatar_path}`
-                        : 'default-avatar.png',
+                        : 'https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-479x512-n8sg74wg.png',
                     }}
                     style={styles.reviewAvatar}
                   />
@@ -352,26 +380,68 @@ const MovieDetailScreen = ({ navigation, route }: any) => {
               </View>
             )}
           />
+        <Text style={styles.descriptionTitle}>Berikan Ulasan</Text>
+        <View style={styles.commentInputContainer}>
+          <TextInput
+            style={styles.commentInput}
+            placeholder="Tulis komentar..."
+            value={newComment}
+            onChangeText={text => setNewComment(text)}
+          />
+          <TouchableOpacity 
+            style={styles.sendButton}
+            onPress={handleSendComment}
+          >
+            <IconsSolid.PaperAirplaneIcon color="white" size={20} />
+          </TouchableOpacity>
+        </View>
+        
         </View>
       </View>
+      
+      <View style={styles.recommendationsContainer}>
+  <CategoryHeader title="Rekomendasi Film Lainnya" />
+  <FlatList
+    data={recommendedMovies}
+    keyExtractor={(item: any) => item.id.toString()}
+    horizontal
+    contentContainerStyle={styles.containerGap24}
+    renderItem={({ item, index }) => (
+      <SubMovieCard
+        cardFunction={() => {
+          navigation.push('MovieDetails', {
+            movieid: item.id,
+          });
+        }}
+        shouldMarginatedAtEnd={true}
+        cardWidth={120}
+        imagePath={baseImagePath('w185', item.poster_path)}
+        title={item.title}
+      />
+    )}
+  />
+</View>
+
       <CategoryHeader title="Pemain Film" />
       <FlatList
-        data={movieCastData}
-        keyExtractor={(item: any) => item.id}
-        horizontal
-        contentContainerStyle={styles.containerGap24}
-        renderItem={({ item, index }) => (
-          <ActorCastCard
-            shouldMarginatedAtEnd={true}
-            cardWidth={80}
-            isFirst={index === 0 ? true : false}
-            isLast={index === movieCastData?.length - 1 ? true : false}
-            imagePath={baseImagePath('w185', item.profile_path)}
-            title={item.original_name}
-            subtitle={item.character}
-          />
-        )}
-      />
+  data={movieCastData}
+  keyExtractor={(item: any) => item.id.toString()}
+  horizontal
+  contentContainerStyle={styles.containerGap24}
+  renderItem={({ item, index }) => (
+    <ActorCastCard
+      shouldMarginatedAtEnd={true}
+      cardWidth={80}
+      isFirst={index === 0 ? true : false}
+      isLast={index === movieCastData?.length - 1 ? true : false}
+      imagePath={baseImagePath('w185', item.profile_path)}
+      title={item.original_name}
+      subtitle={item.character}
+      onPress={() => handleActorPress(item.id, item.original_name)} // Tambahkan ini
+    />
+  )}
+/>
+
 
       <Modal
         visible={modalVisible}
